@@ -41,7 +41,7 @@ class NumberType extends Base_Controller {
 		$this->load->model("admin/numberTypeModel", "numberType", true);
 		$org_id = $this->input->post("org_id");
 		$default_number_types = $this->numberType->getDefaultNumberTypes();
-		$res   = array('state' => true, 'msg' => 'Number type settings created successfully');		
+		$res   = array('state' => true, 'msg' => 'สร้างการตั้งค่าตัวเลบสำเร็จ');		
 		foreach ($default_number_types as $value){
 			$data = array(
             	"type" => $value->type,
@@ -52,15 +52,14 @@ class NumberType extends Base_Controller {
             );
         	$inserted_id = $this->numberType->addNumberTypeByOrg($data);
         	if($inserted_id < 0){
-        		$res   = array('state' => false, 'msg' => 'Something went wrong');
+        		$res   = array('state' => false, 'msg' => 'เกิดข้อผิดพลาด');
         		break;
         	}
 		}
 		if($res["state"] == true){
-			$toast = array('state' => true, 'msg' => 'Number type settings created successfully');
+			$toast = array('state' => true, 'msg' => 'สร้างการตั้งค่าตัวเลบสำเร็จ');
 			$this->session->set_flashdata('toast', $toast);
 		}
-		$res   = array('state' => true, 'msg' => 'Number type settings created successfully');
 		return $this->output
 					->set_content_type('application/json')
 					->set_output(json_encode($res));
@@ -77,8 +76,26 @@ class NumberType extends Base_Controller {
 			);
 
 		$this->load->model("admin/numberTypeModel", "numberType", true);
-		$this->numberType->updateNumberTypeByOrg($data, $number_type_id);
-		$res   = array('state' => true, 'msg' => 'Number type setting is updated successfully');
+		$condition = array('number_type_id' => $number_type_id);
+		$this->numberType->updateNumberTypeByOrg($data, $condition);
+		$res   = array('state' => true, 'msg' => 'การตั้งค่าประเภทตัวเลขเสร็จสมบูรณ์');
+
+		return $this->output
+					->set_content_type('application/json')
+					->set_output(json_encode($res));
+	}
+
+	public function updateLimit(){
+
+    	$type = $this->input->post("type");
+		$default_limit = $this->input->post("limit");
+		$org_id = $this->input->post("org_id");
+		$data = array("default_limit" => $default_limit);
+		$condition = array('org_id' => $org_id, 'type' => $type);
+
+		$this->load->model("admin/numberTypeModel", "numberType", true);
+		$this->numberType->updateNumberTypeByOrg($data, $condition);
+		$res   = array('state' => true, 'msg' => 'แก้ไขการจำกัดเสร็จสิ้สมบูรณ์');
 
 		return $this->output
 					->set_content_type('application/json')

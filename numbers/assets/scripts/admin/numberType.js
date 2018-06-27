@@ -16,41 +16,55 @@ var numberEditable = function () {
         function editRow(oTable, nRow) {
             var aData = oTable.fnGetData(nRow);
             var jqTds = $('>td', nRow);
-            jqTds[2].innerHTML = '<input type="text" step="any" class="form-control" style="width: 100%;" value="' + aData[2] + '">';
-            jqTds[3].innerHTML = '<input type="text" step="any" class="form-control" style="width: 100%;" value="' + aData[3] + '">';
-            jqTds[4].innerHTML = '<a class="save" href="">Save</a><a class="cancel" href="">Cancel</a>';
+            jqTds[2].innerHTML = '<input type="number" min="1" class="form-control" style="width: 100%;" value="' + aData[2] + '">';
+            jqTds[3].innerHTML = '<input type="number" min="1" class="form-control" style="width: 100%;" value="' + aData[3] + '">';
+            jqTds[4].innerHTML = '<a class="save" href="">บันทึก</a><span> </span><a class="cancel" href="">ยกเลิก</a>';
         }
 
         function saveRow(oTable, nRow) {
             var jqInputs = $('input', nRow);
             var number_type_id = $(nRow).attr("number_type_id");
-            var data = {rate: jqInputs[0].value, default_limit: jqInputs[1].value, number_type_id: number_type_id};
-            $.ajax({
-                url : '/admin/settings/numberType/updateNumberType',
-                type : 'post',
-                data : data,
-                success : function(response) {
-                    if (response.state == false) {
+            if(jqInputs[0].value <= 0){
+                var msg = "การจ่ายต้องมากกว่า o";
+                var shortCutFunction = "error";
+                var title = "เกิดข้อผิดพลาด";
+                toastr[shortCutFunction](msg, title);
+                $('#toast-container').addClass('animated shake');
+            } else if(jqInputs[1].value < 0){
+                var msg = "วงเงินไม่สามารถต่ำกว่า 0";
+                var shortCutFunction = "error";
+                var title = "เกิดข้อผิดพลาด";
+                toastr[shortCutFunction](msg, title);
+                $('#toast-container').addClass('animated shake');
+            } else {
+                var data = {rate: jqInputs[0].value, default_limit: jqInputs[1].value, number_type_id: number_type_id};
+                $.ajax({
+                    url : '/admin/settings/numberType/updateNumberType',
+                    type : 'post',
+                    data : data,
+                    success : function(response) {
+                        if (response.state == false) {
 
-                        var shortCutFunction = "error";
-                        var msg = response.msg;
-                        var title = "Error !";
-                        toastr[shortCutFunction](msg, title);
-                        $('#toast-container').addClass('animated shake');
-                    } else {
-                        oTable.fnUpdate(jqInputs[0].value, nRow, 2, false);
-                        oTable.fnUpdate(jqInputs[1].value, nRow, 3, false);
-                        oTable.fnUpdate('<a class="edit"><i class="fa fa-pencil">', nRow, 4, false);
-                        oTable.fnDraw();
+                            var shortCutFunction = "error";
+                            var msg = response.msg;
+                            var title = "เกิดข้อผิดพลาด";
+                            toastr[shortCutFunction](msg, title);
+                            $('#toast-container').addClass('animated shake');
+                        } else {
+                            oTable.fnUpdate(jqInputs[0].value, nRow, 2, false);
+                            oTable.fnUpdate(jqInputs[1].value, nRow, 3, false);
+                            oTable.fnUpdate('<a class="edit"><i class="fa fa-pencil">', nRow, 4, false);
+                            oTable.fnDraw();
 
-                        var shortCutFunction = "success";
-                        var msg = response.msg;
-                        var title = "Notification!";
-                        toastr[shortCutFunction](msg, title);
-                        $('#toast-container').addClass('animated shake');
+                            var shortCutFunction = "success";
+                            var msg = response.msg;
+                            var title = "แจ้งเตือน";
+                            toastr[shortCutFunction](msg, title);
+                            $('#toast-container').addClass('animated shake');
+                        }
                     }
-                }
-            });
+                });
+            }            
         }
 
         var table = $('#sample_editable_number');
@@ -126,29 +140,6 @@ var numberEditable = function () {
             saveRow(oTable, nEditing);                
         });
 
-        table.on('click', 'a.delete-agent', function () {
-
-            if(confirm("Do you really want to delete this agent?")){
-                
-                $.ajax({
-                    url : '/admin/settings/agentManagement/deleteAgent',
-                    type : 'post',
-                    data : {agent_id:$(this).attr('agent_id'), agent_name:$(this).attr('agent_name')},
-                    success : function(response) { 
-                            
-                        if(response == "success") {
-                            window.location.reload();                            
-                        }else{
-                            var msg = "Something went wrong";
-                            var shortCutFunction = "error";
-                            var title = "Error !";
-                            toastr[shortCutFunction](msg, title);
-                            $('#toast-container').addClass('animated shake');
-                        }
-                    }
-                });
-            }
-        });
     }
 
     return {
@@ -181,7 +172,7 @@ $(document).ready(function(){
 
     $('.set-default').click(function(e) {
 
-        if(confirm("Do you really want to set by default?")){
+        if(confirm("คุณต้องการตั้งค่าลิมิต?")){
             $.ajax({
                 url : '/admin/settings/numberType/setByDefault',
                 type : 'post',
@@ -200,14 +191,14 @@ $(document).ready(function(){
 
     function err_msg(msg){
         var shortCutFunction = "error";
-        var title = "Error !";
+        var title = "เกิดข้อผิดพลาด";
         toastr[shortCutFunction](msg, title);
         $('#toast-container').addClass('animated shake');
     }
 
     function notification_msg(msg){
         var shortCutFunction = "success";
-        var title = "Notification!";
+        var title = "แจ้งเตือน";
         toastr[shortCutFunction](msg, title);
         $('#toast-container').addClass('animated shake');
     }

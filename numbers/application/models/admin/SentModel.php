@@ -24,5 +24,11 @@
             $this->db->where($condition);
             $this->db->update('latest_new_sent', $data);
         }
+
+        public function deleteAllSent($condition)
+        {
+            $this->db->where($condition);
+            $this->db->delete('latest_new_sent');
+        }
 	}
 ?>

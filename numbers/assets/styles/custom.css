@@ -40,7 +40,7 @@
   text-align: center;
 }
 .inline-block{
-  display: inline-block;
+  display: table-cell;
 }
 div.width-100{
   width: 100px;
@@ -65,6 +65,18 @@ table.main{
 div.col-md-3 table.main{
   margin-bottom: 0px !important;
 }
+thead.display-block{
+  display: block;
+}
+tbody.vertical-scroll{
+  display: block;
+  height: 360px;
+  overflow-y: scroll;
+}
+tbody.border-top-none{
+  border-top: none !important;
+  display: block;
+}
 table.main tr{
 	height: 36px !important;
 }
@@ -75,19 +87,38 @@ table th{
 	border-bottom: 1px solid #000;
 }
 table td{
-	text-align: center;
 	vertical-align: middle !important;	
 	padding: 0px;
 	height: 26px !important;
   border: 1px solid #c2cad8 !important;
 }
+
 tr.empty td{
 	border:none !important;
 }
-
+tr.head-highlight{
+  background: #7FFFD4;
+}
+tr.tail-highlight{
+  background: #7FFFD4;
+}
+tr.head-tail-highlight{
+  background: #4169E1;
+}
+tr.top-highlight{
+  background: #FFFFCC;
+}
+tr.bottom-highlight{
+  background: #FFFFCC;
+}
+tr.top-bottom-highlight{
+  background: #FF0000;
+}
 table.main input{
-	text-align: center;
 	width: 60px;
+  background-color: #fff;
+  font-weight: 700;
+  color: #000 !important;
 }
 h3.modal-title{
 	text-align: center !important;
@@ -106,20 +137,16 @@ div.col-md-5, div.col-md-7{
 .red{
   color: #D91E18;
   font-weight: 700;
-  padding-left: 0px;
-  padding-right: 0px;
-}
-.logout{
-  font-size: 20px;
 }
 .greetings{
-  font-size: 20px;
-  margin-top: 12px;
+  font-size: 15px;
+  font-weight: 300;
+  margin-top: 15px;
   margin-right: 20px;
-  color: #ff6161;
+  color: #b4bcc8;
 }
-.margin-left-0{
-  margin-left: 0px !important;
+.margin-left-15{
+  margin-left: 15px !important;
 }
 .margin-left-30{
   margin-left: 30px !important;
@@ -132,21 +159,30 @@ th.sortable { cursor: pointer; }
 td.border-top{
   border-top: solid 2px #000 !important;
 }
-tr.high-light{
+.high-light{
   background: #F4C7C3;
 }
 td.high-light-weak{
   background: #FCE5CD;
 }
+.width-1340{
+  width: 1340px !important;
+}
+.width-1320{
+  width: 1320px !important;
+}
 .width-1300{
-  width: 1300px;
+  width: 1300px !important;
 }
 .send-btn{
-  margin-right: 10px;
   margin-bottom: 10px;
 }
 .confirm-btn{
-  margin-right: 80px;
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
+.cancel-btn{
+  margin-right: 20px;
   margin-bottom: 10px;
 }
 .height-30{
@@ -185,4 +221,67 @@ td.new-sent{
 
 #main-page {
   display: none;
+}
+.left-align{
+  text-align: left;
+}
+.right-align{
+  text-align: right;
+}
+.center-align{
+  text-align: center;
+}
+/*Key In td*/
+.width-37{
+  width: 37px !important;
+}
+.width-78{
+  width: 78px !important;
+}
+.width-60{
+  width: 60px !important;
+}
+.width-330{
+  width: 330px !important;
+}
+/*report td*/
+
+.width-82{
+  width: 82px !important;
+}
+.width-65{
+  width: 65px !important;
+}
+.padding-19{
+  padding-right: 19px !important;
+  padding-left: 19px !important;
+}
+.padding-13{
+  padding-right: 13px !important;
+  padding-left: 14px !important;
+}
+.padding-22{
+  padding-right: 22px !important;
+  padding-left: 22px !important;
+}
+.padding-25{
+  padding-right: 25px !important;
+  padding-left: 26px !important;
+}
+.width-110{
+  width: 110px !important;
+}
+
+.margin-top-25{
+  margin-top: 25px;
+}
+.margin-bottom-30{
+  margin-bottom: 30px;
+}
+.underline {
+  font-size: 20px;
+  border-bottom: 1px solid #000;
+  text-align: center;
+  padding-right: 30px;
+  padding-left: 30px;
 }

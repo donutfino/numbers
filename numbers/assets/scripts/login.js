@@ -28,7 +28,7 @@ $(document).ready(function(){
                 if (response.state == false) {
                     var shortCutFunction = "error";
                     var msg = response.msg;
-                    var title = "Error !";
+                    var title = "เกิดข้อผิดพลาด";
                     toastr[shortCutFunction](msg, title);
                     $('#toast-container').addClass('animated shake');
                 } else {

@@ -7,7 +7,7 @@
 		}
 
         public function getOrgByIdForAdmin($org_id){
-            $this->db->select('o.org_id, o.org_name, o.active, o.seat, u.username, u.email, u.password');
+            $this->db->select('o.org_id, o.org_name, o.org_start_date, o.org_expired_date, o.active, o.seat, u.user_id, u.username, u.email, u.password');
             $this->db->where('o.org_id', $org_id);
             $this->db->where('u.role', 'admin');
             $this->db->from('organizations as o');            

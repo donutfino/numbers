@@ -87,32 +87,32 @@
                                     <span class="arrow"></span>
                                 </a>
                                 <ul class="sub-menu">
-                                    <li class="nav-item active">
+                                    <li class="nav-item">
                                         <a href="/admin/settings/numberType" class="nav-link ">
                                             <span class="title">ประเภทตัวเลข</span>
                                         </a>
                                     </li>
-                                    <li class="nav-item  ">
+                                    <li class="nav-item">
                                         <a href="/admin/settings/organization" class="nav-link ">
                                             <span class="title">เจ้ามือ</span>
                                         </a>
                                     </li>
-                                    <li class="nav-item  ">
+                                    <li class="nav-item">
                                         <a href="/admin/settings/userManagement" class="nav-link ">
                                             <span class="title">การจัดการผู้ใช้งาน</span>
                                         </a>
                                     </li>
-                                    <li class="nav-item  ">
+                                    <li class="nav-item">
                                         <a href="/admin/settings/agentManagement" class="nav-link ">
                                             <span class="title">จัดการหัวหน่วย</span>
                                         </a>
                                     </li>
-                                    <li class="nav-item  ">
+                                    <li class="nav-item">
                                         <a href="/admin/settings/periodManagement" class="nav-link ">
                                             <span class="title">การจัดการงวด</span>
                                         </a>
                                     </li>
-                                    <li class="nav-item">
+                                    <li class="nav-item active">
                                         <a href="/admin/settings/clearPeriodData" class="nav-link">
                                             <span class="title">ลบข้อมูลงวด</span>
                                         </a>
@@ -130,67 +130,48 @@
                 </div>
                 <div class="page-content-wrapper">
                     <div class="page-content">
-                        <div class="input-field">
-                            <h2>ตั้งค่าระเภทตัวเลข</h2>
+                        <div class="org-field">
+                            <h2>ลบข้อมูลงวด</h2>
                             <?php if($org_id == -1){?>
                             <h3 class="alert" data-toggle="tooltip" data-placement="bottom" title="คุณสามาถขอเพิ่มบัญชีผู้ใช้งานจากหัวน้าแอดมินหรือเจ้าของเว็ปไซต์เพื่อเปลี่ยนจากผู้ใช้งานเป็นแอดมิน">คุณไม่สามารถเข้าถึงได้ โปรดยืนยันว่าคุณเป็นแอดมิน</h3>
                             <?php }else{?>
-                            <div class="number-type-table center-align">
-                                <table class="table table-striped table-hover table-bordered" id="sample_editable_number">
+                            <div class="period-table center-align" org_id="<?php echo $org_id;?>">
+                                <table class="table table-striped table-bordered" id="sample_editable_period">
                                     <thead>
                                         <tr>
-                                          <th scope="col">ประเภท</th>
-                                          <th scope="col">หลัก</th>
-                                          <th scope="col">จ่าย</th>
-                                          <th scope="col">ลิมิต</th>
-                                          <th scope="col">แก้ไข</th>
+                                            <th> งวด </th>
+                                            <th> รางวัลที่ 1 </th>
+                                            <th> เลขท้าย 2 ตัว </th>
+                                            <th> รวม </th>
+                                            <th> สุทธิ </th>
+                                            <th> จ่าย </th>
+                                            <th> P/L </th>
+                                            <th> สถานะ </th>
+                                            <th> ลบ </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php foreach ($number_types as $key => $value) :?>
-                                            <tr class="available" number_type_id="<?=$value->number_type_id?>">
-                                                <?php
-                                                    switch ($value->type) {
-                                                        case "Head":
-                                                            $number_type = "หัว";
-                                                            break;
-                                                        case "Tail":
-                                                            $number_type = "ท้าย";
-                                                            break;
-                                                        case "Head Special":
-                                                            $number_type = "โต๊ดหัว";
-                                                            break;
-                                                        case "Tail Special":
-                                                            $number_type = "โต๊ด้ทาย";
-                                                            break;
-                                                        case "Top":
-                                                            $number_type = "บน";
-                                                            break;
-                                                        case "Bottom":
-                                                            $number_type = "ล่าง";
-                                                            break;
-                                                        case "Top Run":
-                                                            $number_type = "วิ่งบน";
-                                                            break;
-                                                        case "Bottom Run":
-                                                            $number_type = "วิ่งล่าง";
-                                                            break;
-                                                    }
-                                                ?>
-                                                <td><?=$number_type?></td>
-                                                <td><?=$value->digit?></td>
-                                                <td><?=$value->rate?></td>
-                                                <td><?=$value->default_limit?></td>
-                                                <td><a class="edit"><i class="fa fa-pencil"></i></a></td>
+                                        <?php foreach ($periods as $key => $period) :?>
+                                            <tr class="available" period_id="<?=$period->period_id?>">
+                                                <td><?=$period->period?></td>
+                                                <td><?=$period->top_result?></td>
+                                                <td><?=$period->bottom_result?></td>
+                                                <td class="high right-align"><?=$period->total?></td>
+                                                <td class="high right-align"><?=$period->net?></td>
+                                                <td class="high right-align"><?=$period->pay?></td>
+                                                <td class="high right-align"><?=$period->p_l?></td>
+                                                <?php if($period->status == 0){?>
+                                                <td class="period-status">ปิด</td>
+                                                <?php }else{?>
+                                                <td class="period-status">เปิด</td>
+                                                <?php }?>
+                                                <td><a class="clear-period-data" period_id="<?=$period->period_id?>" status="<?=$period->status?>"><i class="fa fa-trash"></i></a></td>                                                
                                             </tr>
                                         <?php endforeach;?>
                                     </tbody>
                                 </table>
-                                <?php if($set_default_flag == true){?>
-                                <button type="button" class="set-default btn btn-success" org_id="<?php echo $org_id;?>">ตั้งค่าลิมิต</button>
-                                <?php };?>
                             </div>
-                            <?php };?>                                  
+                            <?php }?>     
                         </div>
                     </div>
                 </div>
@@ -204,7 +185,7 @@
             </div>
         </div>
         <script src="/assets/global/plugins/jquery.min.js" type="text/javascript"></script>
-        <script src="/assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>       
+        <script src="/assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>      
         <script src="/assets/global/plugins/js.cookie.min.js" type="text/javascript"></script>
         <script src="/assets/global/scripts/datatable.js" type="text/javascript"></script>
         <script src="/assets/global/plugins/datatables/datatables.min.js" type="text/javascript"></script>
@@ -212,7 +193,7 @@
         <script src="/assets/global/plugins/bootstrap-toastr/toastr.min.js"></script>
         <script src="/assets/global/scripts/app.min.js" type="text/javascript"></script>
         <script src="/assets/scripts/layout.min.js" type="text/javascript"></script>
-        <script src="/assets/scripts/admin/numberType.js" type="text/javascript"></script>
+        <script src="/assets/scripts/admin/clearPeriodData.js" type="text/javascript"></script>
         <script type="text/javascript">
             <?php
                 $toast =  $this->session->flashdata('toast');

@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class KeyIn extends Base_Controller {
+class Log extends Base_Controller {
 
 	public function __construct()
     {    	
@@ -10,8 +10,8 @@ class KeyIn extends Base_Controller {
 
 	public function index()
 	{	
-		if($this->session->userdata('role') == "admin")
-    		redirect('/admin/keyIn');
+		if($this->session->userdata('role') == "user")
+    		redirect('/user/keyIn');
 
     	$this->load->model("admin/organizationModel", "organization", true);
     	$user_org_id = $this->session->userdata('user_org_id');
@@ -20,6 +20,7 @@ class KeyIn extends Base_Controller {
 
 		if(!empty($orgs)){
 			$content['org_id'] = $orgs[0]->org_id;
+			
 			$condition = array(
 				'org_id' => $content['org_id']
 			);
@@ -36,6 +37,6 @@ class KeyIn extends Base_Controller {
 			$content['org_id'] = -1;
     	}
 
-		$this->load->view('user/keyIn', $content);
+		$this->load->view('admin/report/log', $content);
 	}
 }

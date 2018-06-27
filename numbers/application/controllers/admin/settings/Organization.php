@@ -23,5 +23,29 @@ class Organization extends Base_Controller {
 			$content['org_id'] = -1;
 		}
 		$this->load->view('admin/settings/organization', $content);
-	}	
+	}
+
+	public function updateAdmin(){
+
+    	$username = $this->input->post("username");
+		$password = $this->input->post("password");
+		$user_id = $this->input->post("user_id");
+
+		$this->load->model("userModel", "user", true);
+		
+		$data = array(
+			"username" => $username,
+			"password" => $password
+		);
+
+		$this->user->updateUser($data, $user_id);
+
+		$res   = array('state' => true, 'msg' => $username.' อัพเดทเสร็จสิ้น');
+
+
+		
+		return $this->output
+					->set_content_type('application/json')
+					->set_output(json_encode($res));
+	}
 }

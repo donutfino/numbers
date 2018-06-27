@@ -29,7 +29,11 @@
                 return false;
             }
         }
-        
+        public function deleteAllData($condition){
+            $this->db->where($condition);
+            $this->db->delete("inputs");
+        }
+
         public function inputUpdate($data, $input_id)
         {
             $this->db->where("input_id", $input_id);

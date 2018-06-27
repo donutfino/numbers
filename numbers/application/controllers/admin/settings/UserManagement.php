@@ -42,12 +42,12 @@ class UserManagement extends Base_Controller {
 
 	public function addUser(){
 		$this->load->library('form_validation');
-		$this->form_validation->set_rules('username', 'Username', 'required');
-        $this->form_validation->set_rules('email', 'Email', 'required|valid_email|callback_emailCheck');
-        $this->form_validation->set_rules('password', 'Password', 'required');
-        $this->form_validation->set_rules('role', 'User role', 'required');
-        $this->form_validation->set_rules('active', 'Active', 'required');
-        $this->form_validation->set_rules('org_id', 'Org ID', 'required');
+		$this->form_validation->set_rules('username', 'ชื่อผู้ใช้งาน', 'required');
+        $this->form_validation->set_rules('email', 'อีเมล', 'required|valid_email|callback_emailCheck');
+        $this->form_validation->set_rules('password', 'รหัสผ่าน', 'required');
+        $this->form_validation->set_rules('role', 'หน้าที่', 'required');
+        $this->form_validation->set_rules('active', 'ใช้งาน', 'required');
+        $this->form_validation->set_rules('org_id', 'เจ้ามือ', 'required');
 
         if ($this->form_validation->run() == FALSE) {
            	$res = array('state' => false, 'msg' => validation_errors());
@@ -71,11 +71,11 @@ class UserManagement extends Base_Controller {
 			$this->load->model("userModel", "user", true);
 			$user_id = $this->user->addUser($data);
 			if($user_id > 0){
-				$res   = array('state' => true, 'msg' => 'User added successfully');
-				$toast = array('state' => true, 'msg' => $username.' added successfully');
+				$res   = array('state' => true, 'msg' => 'เพิ่มบัญชีผู้ใช้งานสำเร็จ');
+				$toast = array('state' => true, 'msg' => 'เพิ่มบัญชีผู้ใช้งานสำเร็จ');
 				$this->session->set_flashdata('toast', $toast);
 			}else{
-				$res   = array('state' => false, 'msg' => 'Something went wrong');
+				$res   = array('state' => false, 'msg' => 'การข้อผิดพลาด');
 			}
 			
         }      
@@ -87,10 +87,10 @@ class UserManagement extends Base_Controller {
 	public function updateUser(){
 
 		$this->load->library('form_validation');
-		$this->form_validation->set_rules('username', 'Username', 'required');
-        $this->form_validation->set_rules('email', 'Email', 'required|valid_email');
-        $this->form_validation->set_rules('password', 'Password', 'required');
-        $this->form_validation->set_rules('active', 'Active', 'required');
+		$this->form_validation->set_rules('username', 'ชื่อผู้ใช้งาน', 'required');
+        $this->form_validation->set_rules('email', 'อีเมล', 'required|valid_email');
+        $this->form_validation->set_rules('password', 'รหัสผ่าน', 'required');
+        $this->form_validation->set_rules('active', 'ใช้งาน', 'required');
 
         if ($this->form_validation->run() == FALSE) {
            	$res = array('state' => false, 'msg' => validation_errors());
@@ -105,7 +105,7 @@ class UserManagement extends Base_Controller {
 
 			$update_flag = $this->user->update_check($user_id, $email);
 			if($update_flag == false){
-				$res   = array('state' => false, 'msg' => 'The given email already exists');
+				$res   = array('state' => false, 'msg' => 'อีเมลนี้มีอยู่ในระบบแล้ว');
 			}else{
 				$data = array(
 					"username" => $username,
@@ -116,7 +116,7 @@ class UserManagement extends Base_Controller {
 
 				$this->user->updateUser($data, $user_id);
 
-				$res   = array('state' => true, 'msg' => $username.' is updated successfully');
+				$res   = array('state' => true, 'msg' => $username.' อัพเดทเสร็จสิ้น');
 			}
         }
 		
@@ -138,7 +138,7 @@ class UserManagement extends Base_Controller {
 
 		$this->user->deleteUser($condition);
 
-		$toast = array('state' => true, 'msg' => $username.' is deleted successfully');
+		$toast = array('state' => true, 'msg' => $username.' ลบเสร็จสิ้น');
 		$this->session->set_flashdata('toast', $toast);
 
 		echo "success";
@@ -148,7 +148,7 @@ class UserManagement extends Base_Controller {
         $this->db->where('email', $str);
         $query = $this->db->get('users');
         if($query->num_rows() > 0){
-        	$this->form_validation->set_message('emailCheck', 'The given email already exists.');
+        	$this->form_validation->set_message('emailCheck', 'อีเมลนี้มีอยู่ในระบบแล้ว');
             return FALSE;
         } else {
             return TRUE;

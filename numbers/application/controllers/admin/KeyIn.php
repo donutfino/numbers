@@ -234,9 +234,11 @@ class KeyIn extends Base_Controller {
 		$condition = array(			
 			"page" => $page,
 			"agent_id" => $agent_id,
-			"period_id" => $period_id		
+			"period_id" => $period_id,
+			"user_id" => $this->session->userdata('user_id')
 		);
 		$this->load->model("keyInModel", "keyIn", true);
+
 		echo $this->keyIn->getTotalPage($condition);
 
 	}
@@ -383,5 +385,54 @@ class KeyIn extends Base_Controller {
 		return $this->output
 					->set_content_type('application/json')
 					->set_output(json_encode($res));
+	}
+
+	public function deleteAllData(){
+		$period_id = $this->input->post("period_id");
+		$condition = array(
+			"period_id" => $period_id		
+		);
+		$this->load->model("keyInModel", "keyIn", true);
+		$this->keyIn->deleteAllData($condition);
+		$this->load->model("admin/sentModel", "sent", true);
+		$this->sent->deleteAllSent($condition);
+		$this->load->model("admin/periodManagementModel", "period", true);
+
+		$data = array(
+			"total" => null,
+			"net" => null,
+			"pay" => null,
+			"p_l" => null
+		);
+
+		$this->period->updatePeriod($data, $condition);
+		$toast = array('state' => true, 'msg' => 'ข้อมูลทั้งหมดถูกลบเรียบร้อยแล้ว');
+		$this->session->set_flashdata('toast', $toast);
+		
+		echo true;
+	}
+
+	public function deleteAllDataUser(){
+		$period_id = $this->input->post("period_id");
+		$condition = array(
+			"period_id" => $period_id,
+			"user_id" => $this->session->userdata('user_id')	
+		);
+		$this->load->model("keyInModel", "keyIn", true);
+		$this->keyIn->deleteAllData($condition);
+		$condition = array(
+			"period_id" => $period_id		
+		);
+		$this->load->model("admin/sentModel", "sent", true);
+		$this->sent->deleteAllSent($condition);
+		$this->load->model("admin/periodManagementModel", "period", true);
+		$data = array(
+			"total" => null,
+			"net" => null,
+			"pay" => null,
+			"p_l" => null
+		);
+		$this->period->updatePeriod($data, $condition);
+		echo true;
 	}
 }

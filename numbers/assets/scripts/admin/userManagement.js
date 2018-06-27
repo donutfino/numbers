@@ -20,19 +20,19 @@ var userEditable = function () {
             jqTds[1].innerHTML = '<input type="text" step="any" class="form-control" style="width: 100%;" value="' + aData[1] + '">';
             jqTds[2].innerHTML = '<input type="text" step="any" class="form-control" style="width: 100%;" value="' + aData[2] + '">';
             jqTds[4].innerHTML = selectActive(aData[4]);
-            jqTds[5].innerHTML = '<a class="save" href="">Save</a>';
-            jqTds[6].innerHTML = '<a class="cancel" href="">Cancel</a>';
+            jqTds[5].innerHTML = '<a class="save" href="">บันทึก</a>';
+            jqTds[6].innerHTML = '<a class="cancel" href="">ยกเลิก</a>';
         }
 
         function selectActive(activeName){
             var output = '<select class="select-active" style="height:34px;">';
 
-            if(activeName == 'False'){
+            if(activeName == 'ผิด'){
                 output += '<option selected value="0">' + activeName + '</option>'; 
-                output += '<option value="1">' + "True" + '</option>';  
-            } else if(activeName == "True"){
+                output += '<option value="1">' + "ถูก" + '</option>';  
+            } else if(activeName == "ถูก"){
                 output += '<option selected value="1">' + activeName + '</option>';  
-                output += '<option value="0">' + "False" + '</option>'; 
+                output += '<option value="0">' + "ผิด" + '</option>'; 
             } 
             output += '</select>';
 
@@ -43,9 +43,9 @@ var userEditable = function () {
             var jqInputs = $('input', nRow);
             var jqSelects=$('select.select-active', nRow);
             if(jqSelects[0].value == 0){
-                var active = "False";
+                var active = "ผิด";
             }else{
-                var active = "True";
+                var active = "ถูก";
             }
             var user_id = $(nRow).attr("user_id");
             var data = {username: jqInputs[0].value, email: jqInputs[1].value,
@@ -60,7 +60,7 @@ var userEditable = function () {
 
                         var shortCutFunction = "error";
                         var msg = response.msg;
-                        var title = "Error !";
+                        var title = "เกิดข้อผิดพลาด";
                         toastr[shortCutFunction](msg, title);
                         $('#toast-container').addClass('animated shake');
                     } else {
@@ -74,7 +74,7 @@ var userEditable = function () {
 
                         var shortCutFunction = "success";
                         var msg = response.msg;
-                        var title = "Notification!";
+                        var title = "แจ้งเตือน";
                         toastr[shortCutFunction](msg, title);
                         $('#toast-container').addClass('animated shake');
                     }
@@ -157,7 +157,7 @@ var userEditable = function () {
 
         table.on('click', 'a.delete-user', function () {
 
-            if(confirm("Do you really want to delete this user?")){
+            if(confirm("คุณต้องการลบบัญชีผู้ใช้งานใช่ไหม?")){
                 
                 $.ajax({
                     url : '/admin/settings/userManagement/deleteUser',
@@ -168,9 +168,9 @@ var userEditable = function () {
                         if(response == "success") {
                             window.location.reload();                            
                         }else{
-                            var msg = "Something went wrong";
+                            var msg = "เกิดข้อผิดพลาด";
                             var shortCutFunction = "error";
-                            var title = "Error !";
+                            var title = "เกิดข้อผิดพลาด";
                             toastr[shortCutFunction](msg, title);
                             $('#toast-container').addClass('animated shake');
                         }
@@ -230,14 +230,14 @@ $(document).ready(function(){
 
     function err_msg(msg){
         var shortCutFunction = "error";
-        var title = "Error !";
+        var title = "เกิดข้อผิดพลาด";
         toastr[shortCutFunction](msg, title);
         $('#toast-container').addClass('animated shake');
     }
 
     function notification_msg(msg){
         var shortCutFunction = "success";
-        var title = "Notification!";
+        var title = "แจ้งเตือน";
         toastr[shortCutFunction](msg, title);
         $('#toast-container').addClass('animated shake');
     }

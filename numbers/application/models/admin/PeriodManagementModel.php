@@ -46,9 +46,9 @@
             $this->db->delete("periods", $condition);
         }
         
-        public function updatePeriod($data, $period_id)
+        public function updatePeriod($data, $condition)
         {
-            $this->db->where("period_id", $period_id);
+            $this->db->where($condition);
             $this->db->update('periods', $data);
         }
     }

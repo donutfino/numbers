@@ -26,9 +26,9 @@
             return $this->db->insert_id();
         }
 
-        public function updateNumberTypeByOrg($data, $number_type_id)
+        public function updateNumberTypeByOrg($data, $condition)
         {
-            $this->db->where("number_type_id", $number_type_id);
+            $this->db->where($condition);
             $this->db->update('number_type_orgs', $data);
         }
 

@@ -1,10 +1,18 @@
 angular.module('myApp', [ 'shagstrom.angular-sortable-table' ]).controller('ReportController',
 	[ '$scope', '$timeout', '$filter', '$http', function($scope, $timeout, $filter, $http) {
 
-		$scope.allHeads = []; $scope.allTails = []; $scope.allHeadSpecials = []; $scope.allTailSpecials = []; $scope.allTops = []; $scope.allBottoms = []; $scope.allTopRuns = []; $scope.allBottomRuns = [];
-		var headSents = []; tailSents = []; headSpecialSents = []; tailSpecialSents = []; topSents = []; bottomSents = []; topRunSents = []; bottomRunSents = [];
-		$scope.heads = []; $scope.tails = []; $scope.headSpecials = []; $scope.tailSpecials = []; $scope.tops = []; $scope.bottoms = []; $scope.topRuns = []; $scope.bottomRuns = [];
-		$scope.headFlag = true; $scope.tailFlag = true; $scope.headSpecialFlag = true; $scope.tailSpecialFlag = true; $scope.topFlag = true; $scope.bottomFlag = true; $scope.topRunFlag = true; $scope.bottomRunFlag = true;
+		$('[data-toggle="tooltip"]').tooltip();
+		
+		$scope.allHeads = []; $scope.allTails = []; $scope.allHeadSpecials = []; $scope.allTailSpecials = [];
+		var headSents = []; tailSents = []; headSpecialSents = []; tailSpecialSents = [];
+		$scope.heads = []; $scope.tails = []; $scope.headSpecials = []; $scope.tailSpecials = [];
+		$scope.headFlag = true; $scope.tailFlag = true; $scope.headSpecialFlag = true; $scope.tailSpecialFlag = true;
+		
+		$scope.allTops = []; $scope.allBottoms = []; $scope.allTopRuns = []; $scope.allBottomRuns = [];
+		var topSents = []; bottomSents = []; topRunSents = []; bottomRunSents = [];
+		$scope.tops = []; $scope.bottoms = []; $scope.topRuns = []; $scope.bottomRuns = [];
+		$scope.topFlag = true; $scope.bottomFlag = true; $scope.topRunFlag = true; $scope.bottomRunFlag = true;
+
 		var commission = 30;
 
 		getHeadSent = function(){
@@ -13,9 +21,10 @@ angular.module('myApp', [ 'shagstrom.angular-sortable-table' ]).controller('Repo
 				"period_id": $('.period-select').val(),
 				"org_id": $('.org-id').attr("org_id")
 			}
+
 			$http({
 			    method:'post',
-			    url:'/admin/report/getSent',
+			    url:'/admin/reports/threeDigits/getSent',
 			    dataType:"json",
 			    data: data,
 			    async: false,
@@ -39,7 +48,7 @@ angular.module('myApp', [ 'shagstrom.angular-sortable-table' ]).controller('Repo
 			}
 			$http({
 			    method:'post',
-			    url:'/admin/report/getSent',
+			    url:'/admin/reports/threeDigits/getSent',
 			    dataType:"json",
 			    data: data,
 			    async: false,
@@ -63,7 +72,7 @@ angular.module('myApp', [ 'shagstrom.angular-sortable-table' ]).controller('Repo
 			}
 			$http({
 			    method:'post',
-			    url:'/admin/report/getSent',
+			    url:'/admin/reports/threeDigits/getSent',
 			    dataType:"json",
 			    data: data,
 			    async: false,
@@ -87,7 +96,7 @@ angular.module('myApp', [ 'shagstrom.angular-sortable-table' ]).controller('Repo
 			}
 			$http({
 			    method:'post',
-			    url:'/admin/report/getSent',
+			    url:'/admin/reports/threeDigits/getSent',
 			    dataType:"json",
 			    data: data,
 			    async: false,
@@ -103,6 +112,7 @@ angular.module('myApp', [ 'shagstrom.angular-sortable-table' ]).controller('Repo
 			    
 			});
 		}
+
 		getTopSent = function(){
 			var data = {
 				"number_type": "Top",
@@ -111,7 +121,7 @@ angular.module('myApp', [ 'shagstrom.angular-sortable-table' ]).controller('Repo
 			}
 			$http({
 			    method:'post',
-			    url:'/admin/report/getSent',
+			    url:'/admin/reports/twoDigits/getSent',
 			    dataType:"json",
 			    data: data,
 			    async: false,
@@ -135,7 +145,7 @@ angular.module('myApp', [ 'shagstrom.angular-sortable-table' ]).controller('Repo
 			}
 			$http({
 			    method:'post',
-			    url:'/admin/report/getSent',
+			    url:'/admin/reports/twoDigits/getSent',
 			    dataType:"json",
 			    data: data,
 			    async: false,
@@ -159,7 +169,7 @@ angular.module('myApp', [ 'shagstrom.angular-sortable-table' ]).controller('Repo
 			}
 			$http({
 			    method:'post',
-			    url:'/admin/report/getSent',
+			    url:'/admin/reports/twoDigits/getSent',
 			    dataType:"json",
 			    data: data,
 			    async: false,
@@ -177,13 +187,13 @@ angular.module('myApp', [ 'shagstrom.angular-sortable-table' ]).controller('Repo
 		}
 		getBottomRunSent = function(){
 			var data = {
-				"number_type": "BottomRun",
+				"number_type": "Bottom Run",
 				"period_id": $('.period-select').val(),
 				"org_id": $('.org-id').attr("org_id")
 			}
 			$http({
 			    method:'post',
-			    url:'/admin/report/getSent',
+			    url:'/admin/reports/twoDigits/getSent',
 			    dataType:"json",
 			    data: data,
 			    async: false,
@@ -199,7 +209,20 @@ angular.module('myApp', [ 'shagstrom.angular-sortable-table' ]).controller('Repo
 			    
 			});
 		}
+
 		formatData = function(){
+			$scope.allHeads = []; $scope.allTails = []; $scope.allHeadSpecials = []; $scope.allTailSpecials = [];
+			var headSents = []; tailSents = []; headSpecialSents = []; tailSpecialSents = [];
+			$scope.heads = []; $scope.tails = []; $scope.headSpecials = []; $scope.tailSpecials = [];
+			$scope.headFlag = true; $scope.tailFlag = true; $scope.headSpecialFlag = true; $scope.tailSpecialFlag = true;
+			
+			$scope.allTops = []; $scope.allBottoms = []; $scope.allTopRuns = []; $scope.allBottomRuns = [];
+			var topSents = []; bottomSents = []; topRunSents = []; bottomRunSents = [];
+			$scope.tops = []; $scope.bottoms = []; $scope.topRuns = []; $scope.bottomRuns = [];
+			$scope.topFlag = true; $scope.bottomFlag = true; $scope.topRunFlag = true; $scope.bottomRunFlag = true;
+
+			var commission = 30;
+
 			for(var i=0; i<1000; i++){
 				if(i.toString().length == 1){
 					var num = "00" + i.toString();				
@@ -229,7 +252,6 @@ angular.module('myApp', [ 'shagstrom.angular-sortable-table' ]).controller('Repo
 				$scope.allTopRuns.push({number: num, amount: 0, sent: 0, hold: 0, new: false, id: 0});
 				$scope.allBottomRuns.push({number: num, amount: 0, sent: 0, hold: 0, new: false, id: 0});			
 			}
-
 			getHeadSent();
 			getTailSent();
 			getHeadSpecialSent();
@@ -239,33 +261,6 @@ angular.module('myApp', [ 'shagstrom.angular-sortable-table' ]).controller('Repo
 			getTopRunSent();
 			getBottomRunSent();
 		}
-		
-		formatData();
-
-		getHeadSent = function(){
-			var data = {
-				"number_type": "Head",
-				"period_id": $('.period-select').val(),
-				"org_id": $('.org-id').attr("org_id")
-			}
-			$http({
-			    method:'post',
-			    url:'/admin/report/getSent',
-			    dataType:"json",
-			    data: data,
-			    async: false,
-			}).then(function(response){
-				temp = response.data;
-				temp.forEach(function(element){
-					var index = -1;
-					$scope.records.some(function(obj, i) {
-						return obj.Country === "Austria" ? index = i : false;
-					});
-				})
-			},function(err){
-			    
-			});
-		}
 
 		$scope.getLimitAndHold = function(){
 			var data = {
@@ -273,7 +268,7 @@ angular.module('myApp', [ 'shagstrom.angular-sortable-table' ]).controller('Repo
 			}
 			$http({
 			    method:'post',
-			    url:'/admin/report/getLimitAndHoldByOrg',
+			    url:'/admin/reports/threeDigits/getLimitAndHoldByOrg',
 			    dataType:"json",
 			    data: data,
 			    async: false,
@@ -312,13 +307,13 @@ angular.module('myApp', [ 'shagstrom.angular-sortable-table' ]).controller('Repo
 						        break;
 						    case "Bottom Run":
 						        $scope.bottomRunLimit = element.default_limit;
-						        $scope.bottomRunRate = element.rate;
+						        $scope.bottomRunRate = element.rate;   
 						}
 					})
 				} else {
 					$http({
 					    method:'post',
-					    url:'/admin/report/getLimitAndHoldByDefault',
+					    url:'/admin/reports/threeDigits/getLimitAndHoldByDefault',
 					    dataType:"json",
 					    data: data,
 					    async: false,
@@ -357,21 +352,25 @@ angular.module('myApp', [ 'shagstrom.angular-sortable-table' ]).controller('Repo
 							    case "Bottom Run":
 							        $scope.bottomRunLimit = element.default_limit;
 							        $scope.bottomRunRate = element.rate;
-							}							
+							}
 						})
-
-						$scope.getHeadData();
 						
 					},function(err){
 					        
 					});
 				}
+				$scope.getHeadData();
 			},function(err){
 			        
 			});
 		}
 
-		$scope.getLimitAndHold();
+		getTotal = function(){
+			$scope.getLimitAndHold();
+			formatData();
+		}
+
+		getTotal();
 
 		shuffle = function(str){
 			var a = str.slice(0, 1);
@@ -398,7 +397,7 @@ angular.module('myApp', [ 'shagstrom.angular-sortable-table' ]).controller('Repo
 			
             $http({
 			    method:'post',
-			    url:'/admin/report/getHeadData',
+			    url:'/admin/reports/threeDigits/getHeadData',
 			    dataType:"json",
 			    data: data,
 			    async: false,
@@ -497,7 +496,7 @@ angular.module('myApp', [ 'shagstrom.angular-sortable-table' ]).controller('Repo
 			
             $http({
 			    method:'post',
-			    url:'/admin/report/getTailData',
+			    url:'/admin/reports/threeDigits/getTailData',
 			    dataType:"json",
 			    data: data,
 			    async: false,
@@ -595,7 +594,7 @@ angular.module('myApp', [ 'shagstrom.angular-sortable-table' ]).controller('Repo
 			
             $http({
 			    method:'post',
-			    url:'/admin/report/getHeadTailData',
+			    url:'/admin/reports/threeDigits/getHeadTailData',
 			    dataType:"json",
 			    data: data,
 			    async: false,
@@ -814,11 +813,12 @@ angular.module('myApp', [ 'shagstrom.angular-sortable-table' ]).controller('Repo
 				if($scope.tailSpecialLimit == 0){
 					$scope.tailSpecialLimit = parseInt($scope.tailSpecialNet/$scope.tailSpecialRate);
 				}
-				$scope.getTopData();				
+				$scope.getTopData();
 			},function(err){
 			        
 			});
 		}
+
 		$scope.getTopData = function(){
 			var data = {
 				"period_id": $('.period-select').val(),
@@ -826,7 +826,7 @@ angular.module('myApp', [ 'shagstrom.angular-sortable-table' ]).controller('Repo
 			}			
             $http({
 			    method:'post',
-			    url:'/admin/report/getTopData',
+			    url:'/admin/reports/twoDigits/getTopData',
 			    dataType:"json",
 			    data: data,
 			    async: false,
@@ -867,7 +867,7 @@ angular.module('myApp', [ 'shagstrom.angular-sortable-table' ]).controller('Repo
 			
             $http({
 			    method:'post',
-			    url:'/admin/report/getBottomData',
+			    url:'/admin/reports/twoDigits/getBottomData',
 			    dataType:"json",
 			    data: data,
 			    async: false,
@@ -908,7 +908,7 @@ angular.module('myApp', [ 'shagstrom.angular-sortable-table' ]).controller('Repo
 			
             $http({
 			    method:'post',
-			    url:'/admin/report/getTopBottomData',
+			    url:'/admin/reports/twoDigits/getTopBottomData',
 			    dataType:"json",
 			    data: data,
 			    async: false,
@@ -1002,6 +1002,19 @@ angular.module('myApp', [ 'shagstrom.angular-sortable-table' ]).controller('Repo
 				$scope.topRunNet = parseInt($scope.topRunAmountTotal * (1 - commission/100));
 				$scope.bottomRunNet = parseInt($scope.bottomRunAmountTotal * (1 - commission/100));
 
+				if($scope.topLimit == 0){
+					$scope.topLimit = parseInt($scope.topNet/$scope.topRate);
+				}
+				if($scope.bottomLimit == 0){
+					$scope.bottomLimit = parseInt($scope.bottomNet/$scope.bottomRate);
+				}
+				if($scope.topRunLimit == 0){
+					$scope.topRunLimit = parseInt($scope.topRunNet/$scope.topRunRate);
+				}
+				if($scope.bottomRunLimit == 0){
+					$scope.bottomRunLimit = parseInt($scope.bottomRunNet/$scope.bottomRunRate);
+				}
+				updatePeriod();
 			},function(err){
 			        
 			});
@@ -1010,504 +1023,739 @@ angular.module('myApp', [ 'shagstrom.angular-sortable-table' ]).controller('Repo
 		$scope.onHeadSend = function(){
 			$scope.headFlag = false;
 		}
-
+		$scope.onHeadCancel = function(){
+			$scope.headFlag = true;
+		}
 		$scope.onHeadConfirm = function(){
-			var divToPrint=document.getElementById("head-print");
-		    newWin= window.open("");
-		    newWin.document.write(divToPrint.outerHTML);
-		    newWin.print();
-		    newWin.close();
+			
+		    $scope.headTotalNewSent = 0;
 		    $scope.heads.forEach(function(element){
 		    	if(element.hold > $scope.headLimit){
-		    		element.sent = element.amount - $scope.headLimit;
-		    		element.hold = $scope.headLimit;
-		    		element.new = true;
-		    		if(element.id == 0){
-		    			var data = {
-		    				"number_type": "Head",
-		    				"number": element.number,
-		    				"sent": element.sent,
-		    				"period_id": $('.period-select').val(),
-		    				"org_id": $('.org-id').attr("org_id")
-		    			}
-		    			$http({
-						    method:'post',
-						    url:'/admin/report/addNewSent',
-						    dataType:"json",
-						    data: data,
-						    async: false,
-						}).then(function(response){
-							var id = response.data.id;
-							element.id = id;
-						},function(err){
-						    
-						});
-		    		}else{
-		    			var data = {
-		    				"number_type": "Head",
-		    				"number": element.number,
-		    				"sent": element.sent,
-		    				"period_id": $('.period-select').val(),
-		    				"org_id": $('.org-id').attr("org_id"),
-		    				"id": element.id
-		    			}
-		    			 $http({
-						    method:'post',
-						    url:'/admin/report/updateNewSent',
-						    dataType:"json",
-						    data: data,
-						    async: false,
-						}).then(function(response){
-							
-						},function(err){
-						    
-						});
-		    		}
+		    		$scope.headTotalNewSent += element.amount - $scope.headLimit;
 		    	}
-		    })
-			$scope.headFlag = true;
+		    });
+		    setTimeout(function(){
+		    	var divToPrint=document.getElementById("head-print");
+			    newWin= window.open("");
+			    newWin.document.write(divToPrint.innerHTML);
+			    newWin.document.getElementById("hidden_div").style.display='block';
+			    newWin.print();
+		    	newWin.close();
+			    $scope.heads.forEach(function(element){
+			    	if(element.hold > $scope.headLimit){
+			    		element.sent = element.amount - $scope.headLimit;
+			    		element.hold = parseInt($scope.headLimit);
+			    		element.new = true;
+			    		if(element.id == 0){
+			    			var data = {
+			    				"number_type": "Head",
+			    				"number": element.number,
+			    				"sent": element.sent,
+			    				"period_id": $('.period-select').val(),
+			    				"org_id": $('.org-id').attr("org_id")
+			    			}
+			    			$http({
+							    method:'post',
+							    url:'/admin/reports/threeDigits/addNewSent',
+							    dataType:"json",
+							    data: data,
+							    async: false,
+							}).then(function(response){
+								var id = response.data.id;
+								element.id = id;
+							},function(err){
+							    
+							});
+			    		}else{
+			    			var data = {
+			    				"number_type": "Head",
+			    				"number": element.number,
+			    				"sent": element.sent,
+			    				"period_id": $('.period-select').val(),
+			    				"org_id": $('.org-id').attr("org_id"),
+			    				"id": element.id
+			    			}
+			    			 $http({
+							    method:'post',
+							    url:'/admin/reports/threeDigits/updateNewSent',
+							    dataType:"json",
+							    data: data,
+							    async: false,
+							}).then(function(response){
+								
+							},function(err){
+							    
+							});
+			    		}
+			    	}
+			    })
+			    $scope.headAmountTotal = 0; $scope.headSentTotal = 0; $scope.headHoldTotal = 0;
+			    for( var i = 0; i < $scope.heads.length; i++){
+					$scope.headAmountTotal += $scope.heads[i].amount;
+					$scope.headSentTotal += $scope.heads[i].sent;
+					$scope.headHoldTotal += $scope.heads[i].hold;
+				}
+				$scope.headFlag = true;
+				updatePeriod();
+		    }, 200);
 		}
 
 		$scope.onTailSend = function(){
 			$scope.tailFlag = false;
 		}
-
+		$scope.onTailCancel = function(){
+			$scope.tailFlag = true;
+		}
 		$scope.onTailConfirm = function(){
 			
-			var divToPrint=document.getElementById("tail-print");
-		    newWin= window.open("");
-		    newWin.document.write(divToPrint.outerHTML);
-		    newWin.print();
-		    newWin.close();
+			$scope.tailTotalNewSent = 0;
 		    $scope.tails.forEach(function(element){
 		    	if(element.hold > $scope.tailLimit){
-		    		element.sent = element.amount - $scope.tailLimit;
-		    		element.hold = $scope.tailLimit;
-		    		element.new = true;
-		    		if(element.id == 0){
-		    			var data = {
-		    				"number_type": "Tail",
-		    				"number": element.number,
-		    				"sent": element.sent,
-		    				"period_id": $('.period-select').val(),
-		    				"org_id": $('.org-id').attr("org_id")
-		    			}
-		    			$http({
-						    method:'post',
-						    url:'/admin/report/addNewSent',
-						    dataType:"json",
-						    data: data,
-						    async: false,
-						}).then(function(response){
-							var id = response.data.id;
-							element.id = id;
-						},function(err){
-						    
-						});
-		    		}else{
-		    			var data = {
-		    				"number_type": "Tail",
-		    				"number": element.number,
-		    				"sent": element.sent,
-		    				"period_id": $('.period-select').val(),
-		    				"org_id": $('.org-id').attr("org_id"),
-		    				"id": element.id
-		    			}
-		    			 $http({
-						    method:'post',
-						    url:'/admin/report/updateNewSent',
-						    dataType:"json",
-						    data: data,
-						    async: false,
-						}).then(function(response){
-
-						},function(err){
-						    
-						});
-		    		}
+		    		$scope.tailTotalNewSent += element.amount - $scope.tailLimit;
 		    	}
-		    })
-		    $scope.tailFlag = true;
+		    });
+		    setTimeout(function(){
+		    	var divToPrint=document.getElementById("tail-print");
+			    newWin= window.open("");
+			    newWin.document.write(divToPrint.innerHTML);
+			    newWin.document.getElementById("hidden_div").style.display='block';
+			    newWin.print();
+		    	newWin.close();
+		    	$scope.tails.forEach(function(element){
+			    	if(element.hold > $scope.tailLimit){
+			    		element.sent = element.amount - $scope.tailLimit;
+			    		element.hold = parseInt($scope.tailLimit);
+			    		element.new = true;
+			    		if(element.id == 0){
+			    			var data = {
+			    				"number_type": "Tail",
+			    				"number": element.number,
+			    				"sent": element.sent,
+			    				"period_id": $('.period-select').val(),
+			    				"org_id": $('.org-id').attr("org_id")
+			    			}
+			    			$http({
+							    method:'post',
+							    url:'/admin/reports/threeDigits/addNewSent',
+							    dataType:"json",
+							    data: data,
+							    async: false,
+							}).then(function(response){
+								var id = response.data.id;
+								element.id = id;
+							},function(err){
+							    
+							});
+			    		}else{
+			    			var data = {
+			    				"number_type": "Tail",
+			    				"number": element.number,
+			    				"sent": element.sent,
+			    				"period_id": $('.period-select').val(),
+			    				"org_id": $('.org-id').attr("org_id"),
+			    				"id": element.id
+			    			}
+			    			 $http({
+							    method:'post',
+							    url:'/admin/reports/threeDigits/updateNewSent',
+							    dataType:"json",
+							    data: data,
+							    async: false,
+							}).then(function(response){
+
+							},function(err){
+							    
+							});
+			    		}
+			    	}
+			    })
+			    $scope.tailAmountTotal = 0; $scope.tailSentTotal = 0; $scope.tailHoldTotal = 0;
+			    for( var i = 0; i < $scope.tails.length; i++){
+					$scope.tailAmountTotal += $scope.tails[i].amount;
+					$scope.tailSentTotal += $scope.tails[i].sent;
+					$scope.tailHoldTotal += $scope.tails[i].hold;
+				}
+			    $scope.tailFlag = true;
+			    updatePeriod();
+		    }, 200);
 		}
 
 		$scope.onHeadSpecialSend = function(){
 			$scope.headSpecialFlag = false;
 		}
+		$scope.onHeadSpecialCancel = function(){
+			$scope.headSpecialFlag = true;
+		}
 
 		$scope.onHeadSpecialConfirm = function(){
-			var divToPrint=document.getElementById("head-special-print");
-		    newWin= window.open("");
-		    newWin.document.write(divToPrint.outerHTML);
-		    newWin.print();
-		    newWin.close();
+			$scope.headSpecialTotalNewSent = 0;
 		    $scope.headSpecials.forEach(function(element){
 		    	if(element.hold > $scope.headSpecialLimit){
-		    		element.sent = element.amount - $scope.headSpecialLimit;
-		    		element.hold = $scope.headSpecialLimit;
-		    		element.new = true;
-		    		if(element.id == 0){
-		    			var data = {
-		    				"number_type": "Head Special",
-		    				"number": element.number,
-		    				"sent": element.sent,
-		    				"period_id": $('.period-select').val(),
-		    				"org_id": $('.org-id').attr("org_id")
-		    			}
-		    			$http({
-						    method:'post',
-						    url:'/admin/report/addNewSent',
-						    dataType:"json",
-						    data: data,
-						    async: false,
-						}).then(function(response){
-							var id = response.data.id;
-							element.id = id;
-						},function(err){
-						    
-						});
-		    		}else{
-		    			var data = {
-		    				"number_type": "Head Special",
-		    				"number": element.number,
-		    				"sent": element.sent,
-		    				"period_id": $('.period-select').val(),
-		    				"org_id": $('.org-id').attr("org_id"),
-		    				"id": element.id
-		    			}
-		    			 $http({
-						    method:'post',
-						    url:'/admin/report/updateNewSent',
-						    dataType:"json",
-						    data: data,
-						    async: false,
-						}).then(function(response){
-							
-						},function(err){
-						    
-						});
-		    		}
+		    		$scope.headSpecialTotalNewSent += element.amount - $scope.headSpecialLimit;
 		    	}
-		    })
-			$scope.headSpecialFlag = true;
+		    });
+		    setTimeout(function(){
+		    	var divToPrint=document.getElementById("head-special-print");
+			    newWin= window.open("");
+			    newWin.document.write(divToPrint.innerHTML);
+			    newWin.document.getElementById("hidden_div").style.display='block';
+			    newWin.print();
+		    	newWin.close();
+		    	$scope.headSpecials.forEach(function(element){
+			    	if(element.hold > $scope.headSpecialLimit){
+			    		element.sent = element.amount - $scope.headSpecialLimit;
+			    		element.hold = parseInt($scope.headSpecialLimit);
+			    		element.new = true;
+			    		if(element.id == 0){
+			    			var data = {
+			    				"number_type": "Head Special",
+			    				"number": element.number,
+			    				"sent": element.sent,
+			    				"period_id": $('.period-select').val(),
+			    				"org_id": $('.org-id').attr("org_id")
+			    			}
+			    			$http({
+							    method:'post',
+							    url:'/admin/reports/threeDigits/addNewSent',
+							    dataType:"json",
+							    data: data,
+							    async: false,
+							}).then(function(response){
+								var id = response.data.id;
+								element.id = id;
+							},function(err){
+							    
+							});
+			    		}else{
+			    			var data = {
+			    				"number_type": "Head Special",
+			    				"number": element.number,
+			    				"sent": element.sent,
+			    				"period_id": $('.period-select').val(),
+			    				"org_id": $('.org-id').attr("org_id"),
+			    				"id": element.id
+			    			}
+			    			 $http({
+							    method:'post',
+							    url:'/admin/reports/threeDigits/updateNewSent',
+							    dataType:"json",
+							    data: data,
+							    async: false,
+							}).then(function(response){
+								
+							},function(err){
+							    
+							});
+			    		}
+			    	}
+			    })
+			    $scope.headSpecialAmountTotal = 0; $scope.headSpecialSentTotal = 0; $scope.headSpecialHoldTotal = 0;
+			    for( var i = 0; i < $scope.headSpecials.length; i++){
+					$scope.headSpecialAmountTotal += $scope.headSpecials[i].amount;
+					$scope.headSpecialSentTotal += $scope.headSpecials[i].sent;
+					$scope.headSpecialHoldTotal += $scope.headSpecials[i].hold;
+				}
+				$scope.headSpecialFlag = true;
+				updatePeriod();
+		    }, 200);
 		}
 
 		$scope.onTailSpecialSend = function(){
 			$scope.tailSpecialFlag = false;
 		}
 
+		$scope.onTailSpecialCancel = function(){
+			$scope.tailSpecialFlag = true;
+		}
+
 		$scope.onTailSpecialConfirm = function(){
-			var divToPrint=document.getElementById("tail-special-print");
-		    newWin= window.open("");
-		    newWin.document.write(divToPrint.outerHTML);
-		    newWin.print();
-		    newWin.close();
+			$scope.tailSpecialTotalNewSent = 0;
 		    $scope.tailSpecials.forEach(function(element){
 		    	if(element.hold > $scope.tailSpecialLimit){
-		    		element.sent = element.amount - $scope.tailSpecialLimit;
-		    		element.hold = $scope.tailSpecialLimit;
-		    		element.new = true;
-		    		if(element.id == 0){
-		    			var data = {
-		    				"number_type": "Tail Special",
-		    				"number": element.number,
-		    				"sent": element.sent,
-		    				"period_id": $('.period-select').val(),
-		    				"org_id": $('.org-id').attr("org_id")
-		    			}
-		    			$http({
-						    method:'post',
-						    url:'/admin/report/addNewSent',
-						    dataType:"json",
-						    data: data,
-						    async: false,
-						}).then(function(response){
-							var id = response.data.id;
-							element.id = id;
-						},function(err){
-						    
-						});
-		    		}else{
-		    			var data = {
-		    				"number_type": "Tail Special",
-		    				"number": element.number,
-		    				"sent": element.sent,
-		    				"period_id": $('.period-select').val(),
-		    				"org_id": $('.org-id').attr("org_id"),
-		    				"id": element.id
-		    			}
-		    			 $http({
-						    method:'post',
-						    url:'/admin/report/updateNewSent',
-						    dataType:"json",
-						    data: data,
-						    async: false,
-						}).then(function(response){
-							
-						},function(err){
-						    
-						});
-		    		}
+		    		$scope.tailSpecialTotalNewSent += element.amount - $scope.tailSpecialLimit;
 		    	}
-		    })
-			$scope.tailSpecialFlag = true;
+		    });
+		    setTimeout(function(){
+		    	var divToPrint=document.getElementById("tail-special-print");
+			    newWin= window.open("");
+			    newWin.document.write(divToPrint.innerHTML);
+			    newWin.document.getElementById("hidden_div").style.display='block';
+			    newWin.print();
+		    	newWin.close();
+		    	$scope.tailSpecials.forEach(function(element){
+			    	if(element.hold > $scope.tailSpecialLimit){
+			    		element.sent = element.amount - $scope.tailSpecialLimit;
+			    		element.hold = parseInt($scope.tailSpecialLimit);
+			    		element.new = true;
+			    		if(element.id == 0){
+			    			var data = {
+			    				"number_type": "Tail Special",
+			    				"number": element.number,
+			    				"sent": element.sent,
+			    				"period_id": $('.period-select').val(),
+			    				"org_id": $('.org-id').attr("org_id")
+			    			}
+			    			$http({
+							    method:'post',
+							    url:'/admin/reports/threeDigits/addNewSent',
+							    dataType:"json",
+							    data: data,
+							    async: false,
+							}).then(function(response){
+								var id = response.data.id;
+								element.id = id;
+							},function(err){
+							    
+							});
+			    		}else{
+			    			var data = {
+			    				"number_type": "Tail Special",
+			    				"number": element.number,
+			    				"sent": element.sent,
+			    				"period_id": $('.period-select').val(),
+			    				"org_id": $('.org-id').attr("org_id"),
+			    				"id": element.id
+			    			}
+			    			 $http({
+							    method:'post',
+							    url:'/admin/reports/threeDigits/updateNewSent',
+							    dataType:"json",
+							    data: data,
+							    async: false,
+							}).then(function(response){
+								
+							},function(err){
+							    
+							});
+			    		}
+			    	}
+			    })
+			    $scope.tailSpecialAmountTotal = 0; $scope.tailSpecialSentTotal = 0; $scope.tailSpecialHoldTotal = 0;
+			    for( var i = 0; i < $scope.tailSpecials.length; i++){
+					$scope.tailSpecialAmountTotal += $scope.tailSpecials[i].amount;
+					$scope.tailSpecialSentTotal += $scope.tailSpecials[i].sent;
+					$scope.tailSpecialHoldTotal += $scope.tailSpecials[i].hold;
+				}
+				$scope.tailSpecialFlag = true;
+				updatePeriod();
+		    }, 200);
 		}
 
 		$scope.onTopSend = function(){
 			$scope.topFlag = false;
 		}
+		$scope.onTopCancel = function(){
+			$scope.topFlag = true;
+		}
 
 		$scope.onTopConfirm = function(){
-			var divToPrint=document.getElementById("top-print");
-		    newWin= window.open("");
-		    newWin.document.write(divToPrint.outerHTML);
-		    newWin.print();
-		    newWin.close();
+			$scope.topTotalNewSent = 0;
 		    $scope.tops.forEach(function(element){
 		    	if(element.hold > $scope.topLimit){
-		    		element.sent = element.amount - $scope.topLimit;
-		    		element.hold = $scope.topLimit;
-		    		element.new = true;
-		    		if(element.id == 0){
-		    			var data = {
-		    				"number_type": "Top",
-		    				"number": element.number,
-		    				"sent": element.sent,
-		    				"period_id": $('.period-select').val(),
-		    				"org_id": $('.org-id').attr("org_id")
-		    			}
-		    			$http({
-						    method:'post',
-						    url:'/admin/report/addNewSent',
-						    dataType:"json",
-						    data: data,
-						    async: false,
-						}).then(function(response){
-							var id = response.data.id;
-							element.id = id;
-						},function(err){
-						    
-						});
-		    		}else{
-		    			var data = {
-		    				"number_type": "Top",
-		    				"number": element.number,
-		    				"sent": element.sent,
-		    				"period_id": $('.period-select').val(),
-		    				"org_id": $('.org-id').attr("org_id"),
-		    				"id": element.id
-		    			}
-		    			 $http({
-						    method:'post',
-						    url:'/admin/report/updateNewSent',
-						    dataType:"json",
-						    data: data,
-						    async: false,
-						}).then(function(response){
-							
-						},function(err){
-						    
-						});
-		    		}
+		    		$scope.topTotalNewSent += element.amount - $scope.topLimit;
 		    	}
-		    })
-			$scope.topFlag = true;
+		    });
+		    setTimeout(function(){
+		    	var divToPrint=document.getElementById("top-print");
+			    newWin= window.open("");
+			    newWin.document.write(divToPrint.innerHTML);
+			    newWin.document.getElementById("hidden_div").style.display='block';
+			    newWin.print();
+		    	newWin.close();
+		    	$scope.tops.forEach(function(element){
+			    	if(element.hold > $scope.topLimit){
+			    		element.sent = element.amount - $scope.topLimit;
+			    		element.hold = parseInt($scope.topLimit);
+			    		element.new = true;
+			    		if(element.id == 0){
+			    			var data = {
+			    				"number_type": "Top",
+			    				"number": element.number,
+			    				"sent": element.sent,
+			    				"period_id": $('.period-select').val(),
+			    				"org_id": $('.org-id').attr("org_id")
+			    			}
+			    			$http({
+							    method:'post',
+							    url:'/admin/reports/twoDigits/addNewSent',
+							    dataType:"json",
+							    data: data,
+							    async: false,
+							}).then(function(response){
+								var id = response.data.id;
+								element.id = id;
+							},function(err){
+							    
+							});
+			    		}else{
+			    			var data = {
+			    				"number_type": "Top",
+			    				"number": element.number,
+			    				"sent": element.sent,
+			    				"period_id": $('.period-select').val(),
+			    				"org_id": $('.org-id').attr("org_id"),
+			    				"id": element.id
+			    			}
+			    			 $http({
+							    method:'post',
+							    url:'/admin/reports/twoDigits/updateNewSent',
+							    dataType:"json",
+							    data: data,
+							    async: false,
+							}).then(function(response){
+								
+							},function(err){
+							    
+							});
+			    		}
+			    	}
+			    })
+			    $scope.topAmountTotal = 0; $scope.topSentTotal = 0; $scope.topHoldTotal = 0;
+			    for( var i = 0; i < $scope.tops.length; i++){
+					$scope.topAmountTotal += $scope.tops[i].amount;
+					$scope.topSentTotal += $scope.tops[i].sent;
+					$scope.topHoldTotal += $scope.tops[i].hold;
+				}
+				$scope.topFlag = true;
+				updatePeriod();
+		    }, 200);
 		}
 
 		$scope.onBottomSend = function(){
 			$scope.bottomFlag = false;
 		}
+		$scope.onBottomCancel = function(){
+			$scope.bottomFlag = true;
+		}
 
 		$scope.onBottomConfirm = function(){
-			var divToPrint=document.getElementById("bottom-print");
-		    newWin= window.open("");
-		    newWin.document.write(divToPrint.outerHTML);
-		    newWin.print();
-		    newWin.close();
+			$scope.bottomTotalNewSent = 0;
 		    $scope.bottoms.forEach(function(element){
 		    	if(element.hold > $scope.bottomLimit){
-		    		element.sent = element.amount - $scope.bottomLimit;
-		    		element.hold = $scope.bottomLimit;
-		    		element.new = true;
-		    		if(element.id == 0){
-		    			var data = {
-		    				"number_type": "Bottom",
-		    				"number": element.number,
-		    				"sent": element.sent,
-		    				"period_id": $('.period-select').val(),
-		    				"org_id": $('.org-id').attr("org_id")
-		    			}
-		    			$http({
-						    method:'post',
-						    url:'/admin/report/addNewSent',
-						    dataType:"json",
-						    data: data,
-						    async: false,
-						}).then(function(response){
-							var id = response.data.id;
-							element.id = id;
-						},function(err){
-						    
-						});
-		    		}else{
-		    			var data = {
-		    				"number_type": "Bottom",
-		    				"number": element.number,
-		    				"sent": element.sent,
-		    				"period_id": $('.period-select').val(),
-		    				"org_id": $('.org-id').attr("org_id"),
-		    				"id": element.id
-		    			}
-		    			 $http({
-						    method:'post',
-						    url:'/admin/report/updateNewSent',
-						    dataType:"json",
-						    data: data,
-						    async: false,
-						}).then(function(response){
-							
-						},function(err){
-						    
-						});
-		    		}
+		    		$scope.bottomTotalNewSent += element.amount - $scope.bottomLimit;
 		    	}
-		    })
-			$scope.bottomFlag = true;
+		    });
+		    setTimeout(function(){
+		    	var divToPrint=document.getElementById("bottom-print");
+			    newWin= window.open("");
+			    newWin.document.write(divToPrint.innerHTML);
+			    newWin.document.getElementById("hidden_div").style.display='block';
+			    newWin.print();
+		    	newWin.close();
+		    	$scope.bottoms.forEach(function(element){
+			    	if(element.hold > $scope.bottomLimit){
+			    		element.sent = element.amount - $scope.bottomLimit;
+			    		element.hold = parseInt($scope.bottomLimit);
+			    		element.new = true;
+			    		if(element.id == 0){
+			    			var data = {
+			    				"number_type": "Bottom",
+			    				"number": element.number,
+			    				"sent": element.sent,
+			    				"period_id": $('.period-select').val(),
+			    				"org_id": $('.org-id').attr("org_id")
+			    			}
+			    			$http({
+							    method:'post',
+							    url:'/admin/reports/twoDigits/addNewSent',
+							    dataType:"json",
+							    data: data,
+							    async: false,
+							}).then(function(response){
+								var id = response.data.id;
+								element.id = id;
+							},function(err){
+							    
+							});
+			    		}else{
+			    			var data = {
+			    				"number_type": "Bottom",
+			    				"number": element.number,
+			    				"sent": element.sent,
+			    				"period_id": $('.period-select').val(),
+			    				"org_id": $('.org-id').attr("org_id"),
+			    				"id": element.id
+			    			}
+			    			 $http({
+							    method:'post',
+							    url:'/admin/reports/twoDigits/updateNewSent',
+							    dataType:"json",
+							    data: data,
+							    async: false,
+							}).then(function(response){
+								
+							},function(err){
+							    
+							});
+			    		}
+			    	}
+			    })
+			    $scope.bottomAmountTotal = 0; $scope.bottomSentTotal = 0; $scope.bottomHoldTotal = 0;
+			    for( var i = 0; i < $scope.bottoms.length; i++){
+					$scope.bottomAmountTotal += $scope.bottoms[i].amount;
+					$scope.bottomSentTotal += $scope.bottoms[i].sent;
+					$scope.bottomHoldTotal += $scope.bottoms[i].hold;
+				}
+				$scope.bottomFlag = true;
+				updatePeriod();
+		    }, 200);
 		}
 
 		$scope.onTopRunSend = function(){
 			$scope.topRunFlag = false;
 		}
+		$scope.onTopRunCancel = function(){
+			$scope.topRunFlag = true;
+		}
 
 		$scope.onTopRunConfirm = function(){
-			var divToPrint=document.getElementById("top-run-print");
-		    newWin= window.open("");
-		    newWin.document.write(divToPrint.outerHTML);
-		    newWin.print();
-		    newWin.close();
+			$scope.topRunTotalNewSent = 0;
 		    $scope.topRuns.forEach(function(element){
 		    	if(element.hold > $scope.topRunLimit){
-		    		element.sent = element.amount - $scope.topRunLimit;
-		    		element.hold = $scope.topRunLimit;
-		    		element.new = true;
-		    		if(element.id == 0){
-		    			var data = {
-		    				"number_type": "Top Run",
-		    				"number": element.number,
-		    				"sent": element.sent,
-		    				"period_id": $('.period-select').val(),
-		    				"org_id": $('.org-id').attr("org_id")
-		    			}
-		    			$http({
-						    method:'post',
-						    url:'/admin/report/addNewSent',
-						    dataType:"json",
-						    data: data,
-						    async: false,
-						}).then(function(response){
-							var id = response.data.id;
-							element.id = id;
-						},function(err){
-						    
-						});
-		    		}else{
-		    			var data = {
-		    				"number_type": "Top Run",
-		    				"number": element.number,
-		    				"sent": element.sent,
-		    				"period_id": $('.period-select').val(),
-		    				"org_id": $('.org-id').attr("org_id"),
-		    				"id": element.id
-		    			}
-		    			 $http({
-						    method:'post',
-						    url:'/admin/report/updateNewSent',
-						    dataType:"json",
-						    data: data,
-						    async: false,
-						}).then(function(response){
-							
-						},function(err){
-						    
-						});
-		    		}
+		    		$scope.topRunTotalNewSent += element.amount - $scope.topRunLimit;
 		    	}
-		    })
-			$scope.topRunFlag = true;
+		    });
+		    setTimeout(function(){
+		    	var divToPrint=document.getElementById("top-run-print");
+			    newWin= window.open("");
+			    newWin.document.write(divToPrint.innerHTML);
+			    newWin.document.getElementById("hidden_div").style.display='block';
+			    newWin.print();
+		    	newWin.close();
+		    	$scope.topRuns.forEach(function(element){
+			    	if(element.hold > $scope.topRunLimit){
+			    		element.sent = element.amount - $scope.topRunLimit;
+			    		element.hold = parseInt($scope.topRunLimit);
+			    		element.new = true;
+			    		if(element.id == 0){
+			    			var data = {
+			    				"number_type": "Top Run",
+			    				"number": element.number,
+			    				"sent": element.sent,
+			    				"period_id": $('.period-select').val(),
+			    				"org_id": $('.org-id').attr("org_id")
+			    			}
+			    			$http({
+							    method:'post',
+							    url:'/admin/reports/twoDigits/addNewSent',
+							    dataType:"json",
+							    data: data,
+							    async: false,
+							}).then(function(response){
+								var id = response.data.id;
+								element.id = id;
+							},function(err){
+							    
+							});
+			    		}else{
+			    			var data = {
+			    				"number_type": "Top Run",
+			    				"number": element.number,
+			    				"sent": element.sent,
+			    				"period_id": $('.period-select').val(),
+			    				"org_id": $('.org-id').attr("org_id"),
+			    				"id": element.id
+			    			}
+			    			 $http({
+							    method:'post',
+							    url:'/admin/reports/twoDigits/updateNewSent',
+							    dataType:"json",
+							    data: data,
+							    async: false,
+							}).then(function(response){
+								
+							},function(err){
+							    
+							});
+			    		}
+			    	}
+			    })
+			    $scope.topRunAmountTotal = 0; $scope.topRunSentTotal = 0; $scope.topRunHoldTotal = 0;
+			    for( var i = 0; i < $scope.topRuns.length; i++){
+					$scope.topRunAmountTotal += $scope.topRuns[i].amount;
+					$scope.topRunSentTotal += $scope.topRuns[i].sent;
+					$scope.topRunHoldTotal += $scope.topRuns[i].hold;
+				}
+				$scope.topRunFlag = true;
+				updatePeriod();
+		    }, 200);
 		}
 
 		$scope.onBottomRunSend = function(){
 			$scope.bottomRunFlag = false;
 		}
-
-		$scope.onBottomRunConfirm = function(){
-			var divToPrint=document.getElementById("bottom-run-print");
-		    newWin= window.open("");
-		    newWin.document.write(divToPrint.outerHTML);
-		    newWin.print();
-		    newWin.close();
-		    $scope.bottomRuns.forEach(function(element){
-		    	if(element.hold > $scope.bottomRunLimit){
-		    		element.sent = element.amount - $scope.bottomRunLimit;
-		    		element.hold = $scope.bottomRunLimit;
-		    		element.new = true;
-		    		if(element.id == 0){
-		    			var data = {
-		    				"number_type": "Bottom Run",
-		    				"number": element.number,
-		    				"sent": element.sent,
-		    				"period_id": $('.period-select').val(),
-		    				"org_id": $('.org-id').attr("org_id")
-		    			}
-		    			$http({
-						    method:'post',
-						    url:'/admin/report/addNewSent',
-						    dataType:"json",
-						    data: data,
-						    async: false,
-						}).then(function(response){
-							var id = response.data.id;
-							element.id = id;
-						},function(err){
-						    
-						});
-		    		}else{
-		    			var data = {
-		    				"number_type": "Bottom Run",
-		    				"number": element.number,
-		    				"sent": element.sent,
-		    				"period_id": $('.period-select').val(),
-		    				"org_id": $('.org-id').attr("org_id"),
-		    				"id": element.id
-		    			}
-		    			 $http({
-						    method:'post',
-						    url:'/admin/report/updateNewSent',
-						    dataType:"json",
-						    data: data,
-						    async: false,
-						}).then(function(response){
-							
-						},function(err){
-						    
-						});
-		    		}
-		    	}
-		    })
+		$scope.onBottomRunCancel = function(){
 			$scope.bottomRunFlag = true;
 		}
-		function err_msg(msg){
-	        var shortCutFunction = "error";
-	        var title = "Error !";
-	        toastr[shortCutFunction](msg, title);
-	        $('#toast-container').addClass('animated shake');
-	    }
 
-		function notification_msg(msg){
-	        var shortCutFunction = "success";
-	        var title = "Notification!";
-	        toastr[shortCutFunction](msg, title);
-	        $('#toast-container').addClass('animated shake');
-	    }
+		$scope.onBottomRunConfirm = function(){
+			$scope.bottomRunTotalNewSent = 0;
+		    $scope.bottomRuns.forEach(function(element){
+		    	if(element.hold > $scope.bottomRunLimit){
+		    		$scope.bottomRunTotalNewSent += element.amount - $scope.bottomRunLimit;
+		    	}
+		    });
+		    setTimeout(function(){
+		    	var divToPrint=document.getElementById("bottom-run-print");
+			    newWin= window.open("");
+			    newWin.document.write(divToPrint.innerHTML);
+			    newWin.document.getElementById("hidden_div").style.display='block';
+			    newWin.print();
+		    	newWin.close();
+		    	$scope.bottomRuns.forEach(function(element){
+			    	if(element.hold > $scope.bottomRunLimit){
+			    		
+			    		element.sent = element.amount - $scope.bottomRunLimit;
+			    		element.hold = parseInt($scope.bottomRunLimit);
+			    		element.new = true;
+			    		if(element.id == 0){
+			    			var data = {
+			    				"number_type": "Bottom Run",
+			    				"number": element.number,
+			    				"sent": element.sent,
+			    				"period_id": $('.period-select').val(),
+			    				"org_id": $('.org-id').attr("org_id")
+			    			}
+			    			$http({
+							    method:'post',
+							    url:'/admin/reports/twoDigits/addNewSent',
+							    dataType:"json",
+							    data: data,
+							    async: false,
+							}).then(function(response){
+								var id = response.data.id;
+								element.id = id;
+							},function(err){
+							    
+							});
+			    		}else{
+			    			var data = {
+			    				"number_type": "Bottom Run",
+			    				"number": element.number,
+			    				"sent": element.sent,
+			    				"period_id": $('.period-select').val(),
+			    				"org_id": $('.org-id').attr("org_id"),
+			    				"id": element.id
+			    			}
+			    			 $http({
+							    method:'post',
+							    url:'/admin/reports/twoDigits/updateNewSent',
+							    dataType:"json",
+							    data: data,
+							    async: false,
+							}).then(function(response){
+								
+							},function(err){
+							    
+							});
+			    		}
+			    	}
+			    })
+			    $scope.bottomRunAmountTotal = 0; $scope.bottomRunSentTotal = 0; $scope.bottomRunHoldTotal = 0;
+			    for( var i = 0; i < $scope.bottomRuns.length; i++){
+					$scope.bottomRunAmountTotal += $scope.bottomRuns[i].amount;
+					$scope.bottomRunSentTotal += $scope.bottomRuns[i].sent;
+					$scope.bottomRunHoldTotal += $scope.bottomRuns[i].hold;
+				}
+				$scope.bottomRunFlag = true;
+				updatePeriod();
+		    }, 200);
+		}
+
+		function updatePeriod(){
+			var top_result = 0, bottom_result = 0;
+			var data = {
+				"period_id": $('.period-select').val(),
+				"org_id": $('.org-id').attr("org_id")
+			}
+
+			$http({
+			    method:'post',
+			    url:'/admin/settings/periodManagement/getPeriod',
+			    dataType:"json",
+			    data: data,
+			    async: false,
+			}).then(function(response){
+				var payment = 0, totalAmount = 0, totalNet = 0, p_l = 0;
+				top_result = response.data[0]['top_result'];
+				bottom_result = response.data[0]['bottom_result'];
+				payment = $scope.heads[$scope.heads.findIndex( record => record.number ===  top_result.slice(0, 3))].sent+
+						$scope.tails[$scope.tails.findIndex( record => record.number ===  top_result.slice(3, 6))].sent+
+						$scope.headSpecials[$scope.headSpecials.findIndex( record => record.number ===  top_result.slice(0, 3))].sent+
+						$scope.tailSpecials[$scope.tailSpecials.findIndex( record => record.number ===  top_result.slice(3, 6))].sent+
+						$scope.tops[$scope.tops.findIndex( record => record.number ===  top_result.slice(4, 6))].sent+
+						$scope.bottoms[$scope.bottoms.findIndex( record => record.number ===  bottom_result)].sent+
+						$scope.topRuns[$scope.topRuns.findIndex( record => record.number ===  top_result.slice(4, 5))].sent+
+						$scope.topRuns[$scope.topRuns.findIndex( record => record.number ===  top_result.slice(5, 6))].sent+
+						$scope.bottomRuns[$scope.bottomRuns.findIndex( record => record.number ===  bottom_result.slice(0, 1))].sent+
+						$scope.bottomRuns[$scope.bottomRuns.findIndex( record => record.number ===  bottom_result.slice(1, 2))].sent;
+				totalAmount = $scope.headAmountTotal + $scope.tailAmountTotal + $scope.headSpecialAmountTotal + $scope.tailSpecialAmountTotal+
+							$scope.topAmountTotal + $scope.bottomAmountTotal + $scope.topRunAmountTotal + $scope.bottomRunAmountTotal;
+				totalNet = parseInt(totalAmount * (1 - commission/100));
+				p_l = totalNet - payment;
+
+				var data = {
+					"period_id": $('.period-select').val(),
+					"total" : totalAmount,
+					"net": totalNet,
+					"pay": payment,
+					"p_l":p_l
+				}
+
+				$http({
+				    method:'post',
+				    url:'/admin/settings/periodManagement/updatePeriodInfo',
+				    dataType:"json",
+				    data: data,
+				    async: false,
+				}).then(function(response){
+
+				},function(err){
+				    
+				});
+			},function(err){
+			    
+			});
+		}
+		
+		$('.edit-limit-form').submit(function(e) {
+	        e.preventDefault();        
+	        $('#toast-container').remove();
+	        
+	        $.ajax({
+	            url : '/admin/settings/numberType/updateLimit',
+	            type : 'post',
+	            data : $(this).serialize(),
+	            success : function(response) { 
+
+	                if (response.state == false) {
+	                } else {
+	                    window.location.reload();
+	                }
+	            }
+	        });
+	    });
+
+	    $scope.formatAmount = function(temp){
+			var result = "";
+			if((temp =="") || (temp == undefined)){
+
+			} else {
+				temp = parseInt(temp).toString();
+				var dots = 0;				
+				if(temp.length % 3 == 0){
+					dots = parseInt(temp.length / 3) - 1;
+				} else {				
+					dots = parseInt(temp.length / 3);
+				}
+				for(var i = dots; i >= 1; i--){
+					result += "," + temp.slice(temp.length - i *3, temp.length - (i - 1) *3);
+				}
+				result = temp.slice(0, temp.length - dots * 3) + result;
+			}			
+			return result;
+		}
+
 }]);
 
 angular.element(function() {

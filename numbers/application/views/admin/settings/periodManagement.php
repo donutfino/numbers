@@ -4,7 +4,7 @@
 
     <head>
         <meta charset="utf-8" />
-        <title>Data Entry</title>
+        <title>กรอกข้อมูล</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         <link href="/assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />        
@@ -17,7 +17,7 @@
         <link href="/assets/styles/layout.min.css" rel="stylesheet" type="text/css" />
         <link href="/assets/styles/darkblue.min.css" rel="stylesheet" type="text/css" id="style_color" />
         <link href="/assets/styles/custom.css" rel="stylesheet" type="text/css" />
-        <link rel="shortcut icon" href="favicon.ico" /> </head>
+        <link rel="shortcut icon" href="/assets/img/favicon.ico" /> </head>
 
     <body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white">
         <div class="page-wrapper">
@@ -38,8 +38,7 @@
 
                     <div class="top-menu">
                         <ul class="nav navbar-nav pull-right">
-                            <li class="greetings">Hi, <span class="red"><?php echo $this->session->userdata('username'); ?></span>!</li>
-                            <li><a href="/login/logout" class="logout">Log out</a></li>
+                            <li class="greetings">สวัสดี, <span><?php echo $this->session->userdata('username'); ?></span>!</li>
                         </ul>                        
                     </div>
                     <!-- END RESPONSIVE MENU TOGGLER -->
@@ -58,49 +57,73 @@
                             <li class="nav-item">
                                 <a href="/admin/keyIn" class="nav-link nav-toggle">
                                     <i class="icon-home"></i>
-                                    <span class="title">Key In</span>
+                                    <span class="title">กรอกข้อมูล</span>
                                     <span class="selected"></span>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="/admin/report" class="nav-link nav-toggle">
-                                    <i class="icon-diamond"></i>
-                                    <span class="title">Report</span>
+                                <a href="javascript:;" class="nav-link nav-toggle">
+                                    <i class="icon-puzzle"></i>
+                                    <span class="title">รายงาน</span>
+                                    <span class="arrow"></span>
                                 </a>
+                                <ul class="sub-menu">
+                                    <li class="nav-item">
+                                        <a href="/admin/reports/threeDigits" class="nav-link ">
+                                            <span class="title">รายงานเลข 3 ตัว</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/admin/reports/twoDigits" class="nav-link ">
+                                            <span class="title">รายงานเลข 2 ตัว</span>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                             <li class="nav-item start active open">
                                 <a href="javascript:;" class="nav-link nav-toggle">
                                     <i class="icon-puzzle"></i>
-                                    <span class="title">Settings</span>
+                                    <span class="title">การตั้งค่า</span>
                                     <span class="arrow"></span>
                                 </a>
                                 <ul class="sub-menu">
                                     <li class="nav-item">
                                         <a href="/admin/settings/numberType" class="nav-link ">
-                                            <span class="title">Number Type</span>
+                                            <span class="title">ประเภทตัวเลข</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="/admin/settings/organization" class="nav-link ">
-                                            <span class="title">Organization</span>
+                                            <span class="title">เจ้ามือ</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="/admin/settings/userManagement" class="nav-link ">
-                                            <span class="title">User Management</span>
+                                            <span class="title">การจัดการผู้ใช้งาน</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="/admin/settings/agentManagement" class="nav-link ">
-                                            <span class="title">Agent Management</span>
+                                            <span class="title">จัดการหัวหน่วย</span>
                                         </a>
                                     </li>
                                     <li class="nav-item active">
                                         <a href="/admin/settings/periodManagement" class="nav-link ">
-                                            <span class="title">Period Management</span>
+                                            <span class="title">การจัดการงวด</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/admin/settings/clearPeriodData" class="nav-link">
+                                            <span class="title">ลบข้อมูลงวด</span>
                                         </a>
                                     </li>
                                 </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/login/logout" class="logout nav-link nav-toggle">
+                                    <i class="icon-home"></i>
+                                    <span class="title">ออกจากระบบ</span>
+                                </a>
                             </li>
                         </ul>
                     </div>
@@ -108,23 +131,24 @@
                 <div class="page-content-wrapper">
                     <div class="page-content">
                         <div class="org-field">
-                            <h2>Period Management</h2>
+                            <h2>การจัดการงวด</h2>
                             <?php if($org_id == -1){?>
-                            <h3 class="alert" data-toggle="tooltip" data-placement="bottom" title="You can ask a SUPER ADMIN/GOD to add your 'user_id' into the 'admin_id' field in organization which you are going to work on as admin.">You have no organization to access. Please make sure there's an organization you are included as admin.</h3>
+                            <h3 class="alert" data-toggle="tooltip" data-placement="bottom" title="คุณสามาถขอเพิ่มบัญชีผู้ใช้งานจากหัวน้าแอดมินหรือเจ้าของเว็ปไซต์เพื่อเปลี่ยนจากผู้ใช้งานเป็นแอดมิน">คุณไม่สามารถเข้าถึงได้ โปรดยืนยันว่าคุณเป็นแอดมิน</h3>
                             <?php }else{?>
-                            <div class="period-table">
-                                <table class="table table-striped table-hover table-bordered" id="sample_editable_period">
+                            <div class="period-table center-align" org_id="<?php echo $org_id;?>">
+                                <table class="table table-striped table-bordered" id="sample_editable_period">
                                     <thead>
                                         <tr>
-                                            <th> Period </th>
-                                            <th> Top Result </th>
-                                            <th> Bottom Result </th>
-                                            <th> Total </th>
-                                            <th> Net </th>
-                                            <th> Pay </th>
+                                            <th> งวด </th>
+                                            <th> รางวัลที่ 1 </th>
+                                            <th> เลขท้าย 2 ตัว </th>
+                                            <th> รวม </th>
+                                            <th> สุทธิ </th>
+                                            <th> จ่าย </th>
                                             <th> P/L </th>
-                                            <th> Staus </th>
-                                            <th> Edit </th>
+                                            <th> สถานะ </th>
+                                            <th> แก้ไข </th>
+                                            <th> ยอดรวมหัวหน่วย </th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -132,23 +156,28 @@
                                             <tr class="available" period_id="<?=$period->period_id?>">
                                                 <td><?=$period->period?></td>
                                                 <td><?=$period->top_result?></td>
-                                                <td><?=$period->bottom_result?></td>
-                                                <td><?=$period->total?></td>
-                                                <td><?=$period->net?></td>
-                                                <td><?=$period->pay?></td>
-                                                <td><?=$period->p_l?></td>
+                                                <td><?=$period->bottom_result?></td>                                                
                                                 <?php if($period->status == 0){?>
-                                                <td>Closed</td>
+                                                <td class="high-light right-align"><?=$period->total?></td>
+                                                <td class="high-light right-align"><?=$period->net?></td>
+                                                <td class="high-light right-align"><?=$period->pay?></td>
+                                                <td class="high-light right-align"><?=$period->p_l?></td>
+                                                <td class="period-status">ปิด</td>
                                                 <?php }else{?>
-                                                <td>Open</td>
+                                                <td class="right-align"><?=$period->total?></td>
+                                                <td class="right-align"><?=$period->net?></td>
+                                                <td class="right-align"><?=$period->pay?></td>
+                                                <td class="right-align"><?=$period->p_l?></td>
+                                                <td class="period-status">เปิด</td>
                                                 <?php }?>
-                                                <td><a class="edit"><i class="fa fa-pencil"></i></a></td>                                                
+                                                <td><a class="edit"><i class="fa fa-pencil"></i></a></td>
+                                                <td><a class="view-amount" period_id="<?=$period->period_id?>"><i class="fa fa-eye"></i></a></td>
                                             </tr>
                                         <?php endforeach;?>
                                     </tbody>
                                 </table>
                                 
-                                <button type="button" class="add-user btn btn-success" data-toggle="modal" data-target="#add_period_modal">Add New Period</button>
+                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#add_period_modal">เพิ่มงวดใหม่</button>
                                 <div id="add_period_modal" class="modal fade" role="dialog">
                                   <div class="modal-dialog modal-sm">
 
@@ -156,53 +185,59 @@
                                     <div class="modal-content">
                                       <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h3 class="modal-title">Admin - create period</h3>
+                                        <h3 class="modal-title">แอดมิน-สร้างงวด</h3>
                                       </div>
                                       <div class="modal-body">
                                         <div class="content">
                                             <!-- BEGIN REGISTRATION FORM -->
                                             <form class="register-form" method="post">
                                                 <div class="form-group">
-                                                    <label class="control-label visible-ie8 visible-ie9">Period</label>
+                                                    <label class="control-label visible-ie8 visible-ie9">งวด</label>
                                                     <div class="input-icon">
                                                         <i class="fa fa-calendar"></i>
-                                                        <input class="form-control placeholder-no-fix" type="date" placeholder="Period" name="period" /> </div>
+                                                        <input class="form-control placeholder-no-fix" type="date" placeholder="งวด" name="period" /> </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-                                                    <label class="control-label visible-ie8 visible-ie9">Top Result</label>
+                                                    <label class="control-label visible-ie8 visible-ie9">รางวัลที่ 1</label>
                                                     <div class="input-icon">
                                                         <i class="fa fa-level-up"></i>
-                                                        <input class="form-control placeholder-no-fix" type="text" placeholder="Top Result" name="top_result" /> </div>
+                                                        <input class="form-control placeholder-no-fix" type="text" placeholder="รางวัลที่ 1" name="top_result" /> </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-                                                    <label class="control-label visible-ie8 visible-ie9">Bottom Result</label>
+                                                    <label class="control-label visible-ie8 visible-ie9">เลขท้าย 2 ตัว</label>
                                                     <div class="input-icon">
                                                         <i class="fa fa-level-down"></i>
-                                                        <input class="form-control placeholder-no-fix" type="text" placeholder="Bottom Result" name="bottom_result" /> </div>
+                                                        <input class="form-control placeholder-no-fix" type="text" placeholder="เลขท้าย 2 ตัว" name="bottom_result" /> </div>
                                                 </div>
                                                 <div class="form-group">
                                                     <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-                                                    <label class="control-label visible-ie8 visible-ie9">Status</label>
+                                                    <label class="control-label visible-ie8 visible-ie9">สถานะ</label>
                                                     <div class="input-icon">
                                                         <i class="fa fa-openid"></i>
                                                         <select class="form-control" name="status">
-                                                            <option value="1">Open</option>
-                                                            <option value="0">Closed</option>
+                                                            <option value="1">เปิด</option>
+                                                            <option value="0">ปิด</option>
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div class="form-group" style="display: none;">
                                                     <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-                                                    <label class="control-label visible-ie8 visible-ie9">Org Id</label>
+                                                    <label class="control-label visible-ie8 visible-ie9">เจ้ามือ</label>
                                                     <div class="input-icon">
                                                         <i class="fa fa-envelope"></i>
-                                                        <input class="form-control placeholder-no-fix" type="text" placeholder="Org Id" name="org_id" readonly value=<?php echo $org_id;?> /> </div>
+                                                        <input class="form-control placeholder-no-fix" type="text" placeholder="เจ้ามือ" name="org_id" readonly value=<?php echo $org_id;?> /> </div>
                                                 </div>
                                                 <div class="form-actions">
-                                                    <button type="button" class="close_modal btn btn-danger" data-dismiss="modal">Close</button>                                                                                                                   
-                                                    <button type="submit" class="btn green pull-right"> Add </button>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <button type="button" class="close_modal btn btn-danger pull-left" data-dismiss="modal">ยกเลิก</button>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <button type="submit" class="btn green pull-right"> เพิ่ม </button>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </form>
                                             <!-- END REGISTRATION FORM -->
@@ -225,6 +260,78 @@
                 </div>
             </div>
         </div>
+        <div id="agent_amount_modal" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h3 class="modal-title">ยอดรวมของหัวหน่วยแต่ละคน</h3>
+              </div>
+              <div class="modal-body">
+                <div class="content">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <h4>รางวัลที่ 1</h4>
+                                </div>
+                                <div class="col-sm-4">
+                                    <h4 class="underline modal-topresult"></h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <h4>2 ตัวล่าง</h4>
+                                </div>
+                                <div class="col-sm-4">
+                                    <h4 class="underline modal-bottomresult"></h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead class="agent-head">
+                            
+                        </thead>
+                        <tbody class="amounts">
+
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="pull-right col-md-3">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <h4>จ่าย</h4>
+                                </div>
+                                <div class="col-sm-6">
+                                    <h4 class="underline modal-pay"></h4>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <h4>รับ</h4>
+                                </div>
+                                <div class="col-sm-6">
+                                    <h4 class="underline modal-amount"></h4>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <h4>P/L</h4>
+                                </div>
+                                <div class="col-sm-6">
+                                    <h4 class="underline modal-pl"></h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>                    
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <script src="/assets/global/plugins/jquery.min.js" type="text/javascript"></script>
         <script src="/assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>      
         <script src="/assets/global/plugins/js.cookie.min.js" type="text/javascript"></script>
@@ -243,7 +350,7 @@
             ?>
                 var shortCutFunction = "success";
                 var msg = "<?php echo $toast['msg'] ?>";
-                var title = "Notification";
+                var title = "แจ้งเตือน";
                 toastr[shortCutFunction](msg, title);
                 $('#toast-container').addClass('animated rubberBand');
 
@@ -251,7 +358,7 @@
 
                 var shortCutFunction = "error";
                 var msg = "<?php echo $toast['msg'] ?>";
-                var title = "Error !";
+                var title = "เกิดข้อผิดพลาด";
                 toastr[shortCutFunction](msg, title);
                 $('#toast-container').addClass('animated shake');
                 
