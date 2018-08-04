@@ -69,13 +69,18 @@
                                 </a>
                                 <ul class="sub-menu">
                                     <li class="nav-item">
-                                        <a href="/admin/reports/threeDigits" class="nav-link ">
+                                        <a href="/admin/reports/threeDigits" class="nav-link">
                                             <span class="title">รายงานเลข 3 ตัว</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="/admin/reports/twoDigits" class="nav-link ">
+                                        <a href="/admin/reports/twoDigits" class="nav-link">
                                             <span class="title">รายงานเลข 2 ตัว</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/admin/reports/log" class="nav-link">
+                                            <span class="title">ประวัติ</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -88,27 +93,32 @@
                                 </a>
                                 <ul class="sub-menu">
                                     <li class="nav-item">
-                                        <a href="/admin/settings/numberType" class="nav-link ">
+                                        <a href="/admin/settings/numberType" class="nav-link">
                                             <span class="title">ประเภทตัวเลข</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="/admin/settings/organization" class="nav-link ">
+                                        <a href="/admin/settings/organization" class="nav-link">
                                             <span class="title">เจ้ามือ</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="/admin/settings/userManagement" class="nav-link ">
+                                        <a href="/admin/settings/userManagement" class="nav-link">
                                             <span class="title">การจัดการผู้ใช้งาน</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="/admin/settings/agentManagement" class="nav-link ">
+                                        <a href="/admin/settings/agentManagement" class="nav-link">
                                             <span class="title">จัดการหัวหน่วย</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="/admin/settings/periodManagement" class="nav-link ">
+                                        <a href="/admin/settings/superAgentManagement" class="nav-link">
+                                            <span class="title">การจัดการเจ้ามือ</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/admin/settings/periodManagement" class="nav-link">
                                             <span class="title">การจัดการงวด</span>
                                         </a>
                                     </li>
@@ -177,10 +187,10 @@
                 </div>
             </div>
             <div class="page-footer">
-                <div class="page-footer-inner"> 2018 &copy; All rights reserved
+                <div class="page-footer-inner"> <?php echo date('Y');?> &copy; All rights reserved
                 </div>
                 <div class="scroll-to-top">
-                    <i class="icon-arrow-up"></i>
+                    <i class="fa fa-arrow-up"></i>
                 </div>
             </div>
         </div>

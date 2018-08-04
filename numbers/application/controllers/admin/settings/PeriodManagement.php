@@ -97,11 +97,7 @@ class PeriodManagement extends Base_Controller {
 					"period" => $period,
 					"top_result" => $top_result,
 					"bottom_result" => $bottom_result,
-					"status" => $status,
-					"total" => null,
-					"net" => null,
-					"pay" => null,
-					"p_l" => null
+					"status" => $status
 				);
 				$condition = array(
 					"period_id" => $period_id		
@@ -149,10 +145,37 @@ class PeriodManagement extends Base_Controller {
         }
     }
 
+    public function getAllPeriodByOrg(){
+    	$request = json_decode(file_get_contents("php://input"));
+		$org_id = $request->org_id;
+		$condition = array(
+			"org_id" => $org_id
+		);
+		$this->load->model("admin/periodManagementModel", "period", true);
+		$res = $this->period->getPeriodsByOrgId($condition);
+		return $this->output
+					->set_content_type('application/json')
+					->set_output(json_encode($res));
+    }
+
     public function getPeriod(){
     	$request = json_decode(file_get_contents("php://input"));
 		$org_id = $request->org_id;
 		$period_id = $request->period_id;
+		$condition = array(
+			"period_id" => $period_id,
+			"org_id" => $org_id
+		);
+		$this->load->model("admin/periodManagementModel", "period", true);
+		$res = $this->period->getPeriodsByOrgId($condition);
+		return $this->output
+					->set_content_type('application/json')
+					->set_output(json_encode($res));
+    }
+
+    public function getPeriodAjax(){
+    	$period_id = $this->input->post("period_id");
+		$org_id = $this->input->post("org_id");
 		$condition = array(
 			"period_id" => $period_id,
 			"org_id" => $org_id
@@ -171,6 +194,14 @@ class PeriodManagement extends Base_Controller {
 		$net = $request->net;
 		$pay = $request->pay;
 		$p_l = $request->p_l;
+		$head = $request->head;
+		$tail = $request->tail;
+		$headSpecial = $request->headSpecial;
+		$tailSpecial = $request->tailSpecial;
+		$top = $request->top;
+		$bottom = $request->bottom;
+		$topRun = $request->topRun;
+		$bottomRun = $request->bottomRun;
 		
 		$this->load->model("admin/periodManagementModel", "period", true);
 
@@ -178,7 +209,15 @@ class PeriodManagement extends Base_Controller {
 			"total" => $total,
 			"net" => $net,
 			"pay" => $pay,
-			"p_l" => $p_l
+			"p_l" => $p_l,
+			"head" => $head,
+			"tail" => $tail,
+			"headSpecial" => $headSpecial,
+			"tailSpecial" => $tailSpecial,
+			"top" => $top,
+			"bottom" => $bottom,
+			"topRun" => $topRun,
+			"bottomRun" => $bottomRun
 		);
 		$condition = array(
 			"period_id" => $period_id		
@@ -201,7 +240,7 @@ class PeriodManagement extends Base_Controller {
 			'org_id' => $org_id
 		);
 		$agents = $this->agent->getAgentsByOrgId($condition);
-		$result = array();
+		$result = [];
 		foreach ($agents as $value){
 
 			$data = $this->getSentDetailByAgent($period_id, $value->agent_id, $value->agent_name, $top_result, $bottom_result);
@@ -215,7 +254,7 @@ class PeriodManagement extends Base_Controller {
 
 	public function getSentDetailByAgent($period_id, $agent_id, $agent_name, $top_result, $bottom_result){
 
-		$headTotal = 0; $tailTotal = 0; $headSpecialTotal = 0; $tailSpecialTotal = 0;
+		$headTotal = 0; $tailTotal = 0; $headSpecialTotal = []; $tailSpecialTotal = [];
 		$topTotal = 0; $bottomTotal = 0; $topRunTotal = 0; $bottomRunTotal = 0;
 
 		$this->load->model("keyInModel", "keyIn", true);
@@ -260,66 +299,63 @@ class PeriodManagement extends Base_Controller {
 			"type_id" => "2TB"
 		);
 		$topBottoms = $this->keyIn->getData($condition);
-
+		
 		foreach ($heads as $item){
-			if($item->number === substr($top_result, 0, 3)){
-				switch ($item->operator) {
-					case '':
+			$shuffle_nums = $this->shuffle_num($item->number);
+			$split_num = sizeof($shuffle_nums);
+			foreach ($shuffle_nums as $val) {
+				if($val === substr($top_result, 0, 3)){
+					if($val == $item->number){
 						$headTotal += $item->amount1;
-						break;
-					case '.':
-						$headTotal += $item->amount1 + $item->amount2;
-						break;
-					case '*':
-						$headTotal += $item->amount1;
-						$headSpecialTotal += $item->amount2;
-						break;
-				}
-			}			
+					}
+					switch ($item->operator) {
+						case '.':
+							$headTotal += intval($item->amount2/$split_num);
+							break;
+					}
+				}	
+			}					
 		}
 		foreach ($tails as $item){
-			if($item->number === substr($top_result, 3, 3)){
-				switch ($item->operator) {
-					case '':
+			$shuffle_nums = $this->shuffle_num($item->number);
+			$split_num = sizeof($shuffle_nums);
+			foreach ($shuffle_nums as $val) {
+				if($val === substr($top_result, 3, 3)){
+					if($val == $item->number){
 						$tailTotal += $item->amount1;
-						break;
-					case '.':
-						$tailTotal += $item->amount1 + $item->amount2;
-						break;
-					case '*':
-						$tailTotal += $item->amount1;
-						$tailSpecialTotal += $item->amount2;
-						break;
+					}
+					switch ($item->operator) {
+						case '.':
+							$tailTotal += intval($item->amount2/$split_num);
+							break;
+					}
 				}
 			}
 		}
 		foreach ($headTails as $item){
-			if($item->number == substr($top_result, 0, 3)){
-				switch ($item->operator) {
-					case '':
-						$headTotal += $item->amount1/2;
-						break;
-					case '.':
-						$headTotal += $item->amount1/2 + $item->amount2/2;
-						break;
-					case '*':
-						$headTotal += $item->amount1/2;
-						$headSpecialTotal += $item->amount2/2;
-						break;
+			$shuffle_nums = $this->shuffle_num($item->number);
+			$split_num = sizeof($shuffle_nums);
+			foreach ($shuffle_nums as $val) {
+				if($val === substr($top_result, 0, 3)){
+					if($val == $item->number){
+						$headTotal += intval($item->amount1/2);
+					}
+					switch ($item->operator) {
+						case '.':
+							$headTotal += intval($item->amount2/($split_num*2));
+							break;
+					}
 				}
-			}
-			if($item->number == substr($top_result, 3, 3)){
-				switch ($item->operator) {
-					case '':
-						$tailTotal += $item->amount1/2;
-						break;
-					case '.':
-						$tailTotal += $item->amount1/2 + $item->amount2/2;
-						break;
-					case '*':
-						$tailTotal += $item->amount1/2;
-						$tailSpecialTotal += $item->amount2/2;
-						break;
+
+				if($val === substr($top_result, 3, 3)){
+					if($val == $item->number){
+						$tailTotal += intval($item->amount1/2);
+					}
+					switch ($item->operator) {
+						case '.':
+							$tailTotal += intval($item->amount2/($split_num*2));
+							break;
+					}
 				}
 			}
 		}
@@ -354,6 +390,73 @@ class PeriodManagement extends Base_Controller {
 			}
 		}
 
+		$shuffle_head_specials = $this->shuffle_num(substr($top_result, 0, 3));
+		foreach ($shuffle_head_specials as $element) {
+			$headSpecial = 0;
+			foreach ($heads as $item){
+				$shuffle_nums = $this->shuffle_num($item->number);
+				$split_num = sizeof($shuffle_nums);
+				foreach ($shuffle_nums as $val) {
+					if($val === $element){
+						switch ($item->operator) {
+							case '*':
+								$headSpecial += intval($item->amount2/$split_num);
+								break;
+						}
+					}	
+				}					
+			}
+			foreach ($headTails as $item){
+				$shuffle_nums = $this->shuffle_num($item->number);
+				$split_num = sizeof($shuffle_nums);
+				foreach ($shuffle_nums as $val) {
+					if($val === $element){
+						switch ($item->operator) {
+							case '*':
+								$headSpecial += intval($item->amount2/($split_num*2));
+								break;
+						}
+					}
+				}
+			}
+			$num = "element";
+			$temp = array($$num => $headSpecial );
+			array_push($headSpecialTotal, $temp);
+		}
+
+		$shuffle_tail_specials = $this->shuffle_num(substr($top_result, 3, 3));
+		foreach ($shuffle_tail_specials as $element) {
+			$tailSpecial = 0;
+			foreach ($tails as $item){
+				$shuffle_nums = $this->shuffle_num($item->number);
+				$split_num = sizeof($shuffle_nums);
+				foreach ($shuffle_nums as $val) {
+					if($val === $element){
+						switch ($item->operator) {
+							case '*':
+								$tailSpecial += intval($item->amount2/$split_num);
+								break;
+						}
+					}	
+				}					
+			}
+			foreach ($headTails as $item){
+				$shuffle_nums = $this->shuffle_num($item->number);
+				$split_num = sizeof($shuffle_nums);
+				foreach ($shuffle_nums as $val) {
+					if($val === $element){
+						switch ($item->operator) {
+							case '*':
+								$tailSpecial += intval($item->amount2/($split_num*2));
+								break;
+						}
+					}
+				}
+			}
+			$num = "element";
+			$temp = array($$num => $tailSpecial );
+			array_push($tailSpecialTotal, $temp);
+		}
 		$data = array(
 			'agent_name' => $agent_name,
 			'headTotal' => $headTotal,
@@ -363,9 +466,26 @@ class PeriodManagement extends Base_Controller {
 			'topTotal' => $topTotal,
 			'bottomTotal' => $bottomTotal,
 			'topRunTotal' => $topRunTotal,
-			'bottomRunTotal' => $bottomRunTotal,
-			'total' => $headTotal + $tailTotal + $headSpecialTotal + $tailSpecialTotal + $topTotal + $bottomTotal + $topRunTotal + $bottomRunTotal
+			'bottomRunTotal' => $bottomRunTotal
 		);
 		return $data;
+	}
+
+	public function shuffle_num($str){
+		$a = substr($str, 0, 1);
+		$b = substr($str, 1, 1);
+		$c = substr($str, 2, 1);
+		$temp = array($a.$b.$c, $a.$c.$b, $b.$a.$c, $b.$c.$a, $c.$a.$b, $c.$b.$a);
+		$i = sizeof($temp);
+		while($i--){
+			for( $j = 0 ; $j < $i; $j++){
+				if($temp[$i] == $temp[$j]){
+					unset($temp[$i]);
+					break;
+				}
+			}
+		}
+		$res = $temp;
+		return $res;
 	}
 }

@@ -40,7 +40,8 @@ var periodEditable = function () {
             jqTds[1].innerHTML = '<input type="text" step="any" class="form-control" style="width: 100%;" value="' + aData[1] + '">';
             jqTds[2].innerHTML = '<input type="text" step="any" class="form-control" style="width: 100%;" value="' + aData[2] + '">';
             jqTds[7].innerHTML = selectStatus(aData[7]);
-            jqTds[8].innerHTML = '<a class="save" href="">บันทึก</a><span> </span><a class="cancel" href="">ยกเลิก</a>';
+            jqTds[8].innerHTML = '<a class="save" href="">บันทึก</a>';
+            jqTds[9].innerHTML = '<a class="cancel" href="">ยกเลิก</a>';
 
         }
 
@@ -179,41 +180,177 @@ var periodEditable = function () {
             var childNode = "";
 
             childNode += "<tr>";
-            childNode += "<th>หัวหน่วย</th>";
-            childNode += "<th>หัว  " + top_result.slice(0, 3) + "</th>";
-            childNode += "<th>ท้าย  " + top_result.slice(3, 6) + "</th>";
-            childNode += "<th>โต๊ดหัว  " + top_result.slice(0, 3) + "</th>";
-            childNode += "<th>โต๊ดท้าย  "+ top_result.slice(3, 6) + "</th>";
-            childNode += "<th>บน  " + top_result.slice(4, 6) + "</th>";
-            childNode += "<th>ล่าง  " + bottom_result + "</th>";
-            childNode += "<th>วิ่งบน  "+ top_result.slice(4, 6) + "</th>";
-            childNode += "<th>วิ่งล่าง  " + bottom_result + "</th>";
+            childNode += "<th rowspan='2' style='vertical-align: middle;'>เจ้ามือ</th>";
+            childNode += "<th colspan='3'>3 ตัวหัว</th>";
+            childNode += "<th colspan='3'>3 ตัวท้าย</th>";
+            childNode += "<th colspan='3'>โต๊ดหัส</th>";
+            childNode += "<th colspan='3'>โต๊ดท้าย</th>";
+            childNode += "<th colspan='3'>บน</th>";
+            childNode += "<th colspan='3'>ล่าง</th>";
+            childNode += "<th colspan='3'>วิ่งบน</th>";
+            childNode += "<th colspan='3'>วิ่งล่าง</th>";
+            childNode += "</tr>";
+            childNode += "<tr>";
+            childNode += "<th>เลข</th>";
             childNode += "<th>รวม</th>";
+            childNode += "<th>จ่าย</th>";
+            childNode += "<th>เลข</th>";
+            childNode += "<th>รวม</th>";
+            childNode += "<th>จ่าย</th>";
+            childNode += "<th>เลข</th>";
+            childNode += "<th>รวม</th>";
+            childNode += "<th>จ่าย</th>";
+            childNode += "<th>เลข</th>";
+            childNode += "<th>รวม</th>";
+            childNode += "<th>จ่าย</th>";
+            childNode += "<th>เลข</th>";
+            childNode += "<th>รวม</th>";
+            childNode += "<th>จ่าย</th>";
+            childNode += "<th>เลข</th>";
+            childNode += "<th>รวม</th>";
+            childNode += "<th>จ่าย</th>";
+            childNode += "<th>เลข</th>";
+            childNode += "<th>รวม</th>";
+            childNode += "<th>จ่าย</th>";
+            childNode += "<th>เลข</th>";
+            childNode += "<th>รวม</th>";
+            childNode += "<th>จ่าย</th>";
             childNode += "</tr>";
             $('.agent-head').append(childNode);
+            var period;
+            $.ajax({
+                url : '/admin/settings/periodManagement/getPeriodAjax',
+                type : 'post',
+                data : {period_id: $(this).attr('period_id'), org_id: $('.period-table').attr('org_id')},
+                success : function(response) {
+                    period = response[0];
+                }
+            });
             $.ajax({
                 url : '/admin/settings/periodManagement/getAgentsAmounts',
                 type : 'post',
                 data : {period_id: $(this).attr('period_id'), org_id: $('.period-table').attr('org_id'), top_result: top_result, bottom_result: bottom_result},
                 success : function(response) {
-                    var agents = response;                    
-                    agents.forEach(function(agent){
-                        var childNode = "";
-                        childNode += "<tr>";
-                        childNode += "<td class='center-align'>" + agent.agent_name + "</td>";
-                        childNode += "<td class='right-align'>" + formatAmount(agent.headTotal) + "</td>";
-                        childNode += "<td class='right-align'>" + formatAmount(agent.tailTotal) + "</td>";
-                        childNode += "<td class='right-align'>" + formatAmount(agent.headSpecialTotal) + "</td>";
-                        childNode += "<td class='right-align'>"+ formatAmount(agent.tailSpecialTotal) + "</td>";
-                        childNode += "<td class='right-align'>" + formatAmount(agent.topTotal) + "</td>";
-                        childNode += "<td class='right-align'>" + formatAmount(agent.bottomTotal) + "</td>";
-                        childNode += "<td class='right-align'>" + formatAmount(agent.topRunTotal) + "</td>";
-                        childNode += "<td class='right-align'>"+ formatAmount(agent.bottomRunTotal) + "</td>";
-                        childNode += "<td class='right-align'>"+ formatAmount(agent.total) + "</td>";
-                        childNode += "</tr>";
-                        $('.amounts').append(childNode);
-                    })
-                    $('#agent_amount_modal').modal();
+                    var agents = response;
+                    setTimeout(function(){
+                        agents.forEach(function(agent){
+                            childNode = "";
+                            childNode += "<tr>";
+                            childNode += "<td class='center-align' rowspan='7'>" + agent.agent_name + "</td>";
+                            childNode += "<td class='center-align'>" + top_result.slice(0, 3) + "</th>";                        
+                            childNode += "<td class='right-align'>" + formatAmount(agent.headTotal) + "</td>";
+                            childNode += "<td class='right-align'>" + formatAmount(agent.headTotal*period.head) + "</td>";
+                            childNode += "<td class='center-align'>" + top_result.slice(3, 6) + "</th>";                        
+                            childNode += "<td class='right-align'>" + formatAmount(agent.tailTotal) + "</td>";
+                            childNode += "<td class='right-align'>" + formatAmount(agent.tailTotal*period.tail) + "</td>";
+                            var headShuffles = agent.headSpecialTotal[0];                        
+                            var key = Object.keys(headShuffles)[0];
+                            childNode += "<td class='center-align'>" + key + "</th>";                        
+                            childNode += "<td class='right-align'>" + formatAmount(headShuffles[key]) + "</td>";
+                            childNode += "<td class='right-align'>" + formatAmount(headShuffles[key]*period.headSpecial) + "</td>";
+                            var tailShuffles = agent.tailSpecialTotal[0];                        
+                            var key = Object.keys(tailShuffles)[0];
+                            childNode += "<td class='center-align'>" + key + "</th>";                        
+                            childNode += "<td class='right-align'>" + formatAmount(tailShuffles[key]) + "</td>";
+                            childNode += "<td class='right-align'>" + formatAmount(tailShuffles[key]*period.tailSpecial) + "</td>";
+                            childNode += "<td class='center-align'>" + top_result.slice(4, 6) + "</th>";                        
+                            childNode += "<td class='right-align'>" + formatAmount(agent.topTotal) + "</td>";
+                            childNode += "<td class='right-align'>" + formatAmount(agent.topTotal*period.top) + "</td>";
+                            childNode += "<td class='center-align'>" + bottom_result + "</th>";                        
+                            childNode += "<td class='right-align'>" + formatAmount(agent.bottomTotal) + "</td>";
+                            childNode += "<td class='right-align'>" + formatAmount(agent.bottomTotal*period.bottom) + "</td>";
+                            childNode += "<td class='center-align'>" + top_result.slice(4, 6) + "</th>";                        
+                            childNode += "<td class='right-align'>" + formatAmount(agent.topRunTotal) + "</td>";
+                            childNode += "<td class='right-align'>" + formatAmount(agent.topRunTotal*period.topRun) + "</td>";
+                            childNode += "<td class='center-align'>" + bottom_result + "</th>";                        
+                            childNode += "<td class='right-align'>" + formatAmount(agent.bottomRunTotal) + "</td>";
+                            childNode += "<td class='right-align'>" + formatAmount(agent.bottomRunTotal*period.bottomRun) + "</td>";
+                            childNode += "</tr>";
+
+                            childNode += "<tr>";
+                            childNode += "<td></td><td></td><td></td><td></td><td></td><td></td>";
+                            var headShuffles = agent.headSpecialTotal[1];                        
+                            var key = Object.keys(headShuffles)[0];
+                            childNode += "<td class='center-align'>" + key + "</th>";                        
+                            childNode += "<td class='right-align'>" + formatAmount(headShuffles[key]) + "</td>";
+                            childNode += "<td class='right-align'>" + formatAmount(headShuffles[key]*period.headSpecial) + "</td>";
+                            var tailShuffles = agent.tailSpecialTotal[1];                        
+                            var key = Object.keys(tailShuffles)[0];
+                            childNode += "<td class='center-align'>" + key + "</th>";                        
+                            childNode += "<td class='right-align'>" + formatAmount(tailShuffles[key]) + "</td>";
+                            childNode += "<td class='right-align'>" + formatAmount(tailShuffles[key]*period.tailSpecial) + "</td>";
+                            childNode += "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
+                            childNode += "</tr>";
+
+                            childNode += "<tr>";
+                            childNode += "<td></td><td></td><td></td><td></td><td></td><td></td>";
+                            var headShuffles = agent.headSpecialTotal[2];                        
+                            var key = Object.keys(headShuffles)[0];
+                            childNode += "<td class='center-align'>" + key + "</th>";                        
+                            childNode += "<td class='right-align'>" + formatAmount(headShuffles[key]) + "</td>";
+                            childNode += "<td class='right-align'>" + formatAmount(headShuffles[key]*period.headSpecial) + "</td>";
+                            var tailShuffles = agent.tailSpecialTotal[2];                        
+                            var key = Object.keys(tailShuffles)[0];
+                            childNode += "<td class='center-align'>" + key + "</th>";                        
+                            childNode += "<td class='right-align'>" + formatAmount(tailShuffles[key]) + "</td>";
+                            childNode += "<td class='right-align'>" + formatAmount(tailShuffles[key]*period.tailSpecial) + "</td>";
+                            childNode += "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
+                            childNode += "</tr>";
+
+                            childNode += "<tr>";
+                            childNode += "<td></td><td></td><td></td><td></td><td></td><td></td>";
+                            var headShuffles = agent.headSpecialTotal[3];                        
+                            var key = Object.keys(headShuffles)[0];
+                            childNode += "<td class='center-align'>" + key + "</th>";                        
+                            childNode += "<td class='right-align'>" + formatAmount(headShuffles[key]) + "</td>";
+                            childNode += "<td class='right-align'>" + formatAmount(headShuffles[key]*period.headSpecial) + "</td>";
+                            var tailShuffles = agent.tailSpecialTotal[3];                        
+                            var key = Object.keys(tailShuffles)[0];
+                            childNode += "<td class='center-align'>" + key + "</th>";                        
+                            childNode += "<td class='right-align'>" + formatAmount(tailShuffles[key]) + "</td>";
+                            childNode += "<td class='right-align'>" + formatAmount(tailShuffles[key]*period.tailSpecial) + "</td>";
+                            childNode += "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
+                            childNode += "</tr>";
+
+                            childNode += "<tr>";
+                            childNode += "<td></td><td></td><td></td><td></td><td></td><td></td>";
+                            var headShuffles = agent.headSpecialTotal[4];                        
+                            var key = Object.keys(headShuffles)[0];
+                            childNode += "<td class='center-align'>" + key + "</th>";                        
+                            childNode += "<td class='right-align'>" + formatAmount(headShuffles[key]) + "</td>";
+                            childNode += "<td class='right-align'>" + formatAmount(headShuffles[key]*period.headSpecial) + "</td>";
+                            var tailShuffles = agent.tailSpecialTotal[4];                        
+                            var key = Object.keys(tailShuffles)[0];
+                            childNode += "<td class='center-align'>" + key + "</th>";                        
+                            childNode += "<td class='right-align'>" + formatAmount(tailShuffles[key]) + "</td>";
+                            childNode += "<td class='right-align'>" + formatAmount(tailShuffles[key]*period.tailSpecial) + "</td>";
+                            childNode += "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
+                            childNode += "</tr>";
+
+                            childNode += "<tr>";
+                            childNode += "<td></td><td></td><td></td><td></td><td></td><td></td>";
+                            var headShuffles = agent.headSpecialTotal[5];                        
+                            var key = Object.keys(headShuffles)[0];
+                            childNode += "<td class='center-align'>" + key + "</th>";                        
+                            childNode += "<td class='right-align'>" + formatAmount(headShuffles[key]) + "</td>";
+                            childNode += "<td class='right-align'>" + formatAmount(headShuffles[key]*period.headSpecial) + "</td>";
+                            var tailShuffles = agent.tailSpecialTotal[5];                        
+                            var key = Object.keys(tailShuffles)[0];
+                            childNode += "<td class='center-align'>" + key + "</th>";                        
+                            childNode += "<td class='right-align'>" + formatAmount(tailShuffles[key]) + "</td>";
+                            childNode += "<td class='right-align'>" + formatAmount(tailShuffles[key]*period.tailSpecial) + "</td>";
+                            childNode += "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
+                            childNode += "</tr>";
+
+                            childNode += "<tr>";                        
+                            childNode += "<td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>";
+                            childNode += "</tr>";
+
+                            $('.amounts').append(childNode);
+                        })
+                        $('#agent_amount_modal').modal();
+                    }, 500);
+                    
                 }
             });
         });

@@ -19,7 +19,7 @@
         <link href="/assets/styles/custom.css" rel="stylesheet" type="text/css" />
         <link rel="shortcut icon" href="/assets/img/favicon.ico" /> </head>
 
-    <body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white page-sidebar-closed">
+    <body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white">
         <div class="page-wrapper">
             <div class="page-header navbar navbar-fixed-top">
                 <!-- BEGIN HEADER INNER -->
@@ -48,7 +48,7 @@
             <div class="page-container">
                 <div class="page-sidebar-wrapper">                    
                     <div class="page-sidebar navbar-collapse collapse">                        
-                       <ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-closed" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" style="padding-top: 20px">
+                        <ul class="page-sidebar-menu  page-header-fixed " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" style="padding-top: 20px">
                             <li class="sidebar-toggler-wrapper hide">
                                 <div class="sidebar-toggler">
                                     <span></span>
@@ -69,13 +69,18 @@
                                 </a>
                                 <ul class="sub-menu">
                                     <li class="nav-item">
-                                        <a href="/admin/reports/threeDigits" class="nav-link ">
+                                        <a href="/admin/reports/threeDigits" class="nav-link">
                                             <span class="title">รายงานเลข 3 ตัว</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="/admin/reports/twoDigits" class="nav-link ">
+                                        <a href="/admin/reports/twoDigits" class="nav-link">
                                             <span class="title">รายงานเลข 2 ตัว</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/admin/reports/log" class="nav-link">
+                                            <span class="title">ประวัติ</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -88,27 +93,32 @@
                                 </a>
                                 <ul class="sub-menu">
                                     <li class="nav-item">
-                                        <a href="/admin/settings/numberType" class="nav-link ">
+                                        <a href="/admin/settings/numberType" class="nav-link">
                                             <span class="title">ประเภทตัวเลข</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="/admin/settings/organization" class="nav-link ">
+                                        <a href="/admin/settings/organization" class="nav-link">
                                             <span class="title">เจ้ามือ</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="/admin/settings/userManagement" class="nav-link ">
+                                        <a href="/admin/settings/userManagement" class="nav-link">
                                             <span class="title">การจัดการผู้ใช้งาน</span>
                                         </a>
                                     </li>
                                     <li class="nav-item active">
-                                        <a href="/admin/settings/agentManagement" class="nav-link ">
+                                        <a href="/admin/settings/agentManagement" class="nav-link">
                                             <span class="title">จัดการหัวหน่วย</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="/admin/settings/periodManagement" class="nav-link ">
+                                        <a href="/admin/settings/superAgentManagement" class="nav-link">
+                                            <span class="title">การจัดการเจ้ามือ</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/admin/settings/periodManagement" class="nav-link">
                                             <span class="title">การจัดการงวด</span>
                                         </a>
                                     </li>
@@ -129,7 +139,7 @@
                     </div>
                 </div>
                 <div class="page-content-wrapper">
-                    <div class="page-content width-1300">
+                    <div class="page-content">
                         <div class="org-field">
                             <h2>จัดการหัวหน่วย</h2>
                             <?php if($org_id == -1){?>
@@ -142,17 +152,8 @@
                                             <th> ชื่อ </th>
                                             <th> อีเมล </th>
                                             <th> เครดิต </th>
-                                            <th> รับได้ </th>
                                             <th> คอมมิชชั่น </th>
-                                            <th> ใช้งาน </th>
-                                            <th> ลิมิตหัว </th>
-                                            <th> ลิมิตท้าย </th>
-                                            <th> ลิมิตโต๊ดหัว </th>
-                                            <th> ลิมิตโต๊ดท้าย </th>
-                                            <th> ลิมิตบน </th>
-                                            <th> ลิมิตล่าง </th>
-                                            <th> ลิมิตวิ่งบน </th>
-                                            <th> ลิมิตวิ่งล่าง </th>
+                                            <th> ใช้งาน </th>                                            
                                             <th> แก้ไข </th>
                                             <th> ลบ </th>
                                         </tr>
@@ -163,21 +164,12 @@
                                                 <td><?=$agent->agent_name?></td>
                                                 <td><?=$agent->email?></td>
                                                 <td class="right-align"><?=$agent->credit?></td>
-                                                <td class="right-align"><?=$agent->capacity?></td>
                                                 <td class="right-align"><?=$agent->commision?></td>
                                                 <?php if($agent->active == 0){?>
                                                 <td>ผิด</td>
                                                 <?php }else{?>
                                                 <td>ถูก</td>
                                                 <?php }?>
-                                                <td class="right-align"><?=$agent->headLimit?></td>
-                                                <td class="right-align"><?=$agent->tailLimit?></td>
-                                                <td class="right-align"><?=$agent->headSpecialLimit?></td>   
-                                                <td class="right-align"><?=$agent->tailSpecialLimit?></td>
-                                                <td class="right-align"><?=$agent->topLimit?></td>
-                                                <td class="right-align"><?=$agent->bottomLimit?></td> 
-                                                <td class="right-align"><?=$agent->topRunLimit?></td>
-                                                <td class="right-align"><?=$agent->bottomRunLimit?></td>
                                                 <td><a class="edit"><i class="fa fa-pencil"></i></a></td>
                                                 <td><a class="delete-agent" agent_name="<?=$agent->agent_name?>" agent_id="<?=$agent->agent_id?>"><i class="fa fa-trash"></i></a></td>
                                             </tr>
@@ -221,13 +213,6 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-                                                    <label class="control-label visible-ie8 visible-ie9">รับได้</label>
-                                                    <div class="input-icon">
-                                                        <i class="fa fa-credit-card"></i>
-                                                        <input class="form-control placeholder-no-fix right-align" type="number" min="1" placeholder="รับได้" name="capacity" /> </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
                                                     <label class="control-label visible-ie8 visible-ie9">คอมมิชชั่น</label>
                                                     <div class="input-icon">
                                                         <i class="fa fa-bitcoin"></i>
@@ -254,10 +239,10 @@
                                                 <div class="form-actions">
                                                     <div class="row">
                                                         <div class="col-md-6">
-                                                            <button type="button" class="close_modal btn btn-danger pull-left" data-dismiss="modal">ยกเลิก</button>
+                                                            <button type="submit" class="btn green pull-left"> เพิ่ม </button>                                                            
                                                         </div>
                                                         <div class="col-md-6">
-                                                            <button type="submit" class="btn green pull-right"> เพิ่ม </button>
+                                                            <button type="button" class="close_modal btn btn-danger pull-right" data-dismiss="modal">ยกเลิก</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -275,10 +260,10 @@
                 </div>
             </div>
             <div class="page-footer">
-                <div class="page-footer-inner"> 2018 &copy; All rights reserved
+                <div class="page-footer-inner"> <?php echo date('Y');?> &copy; All rights reserved
                 </div>
                 <div class="scroll-to-top">
-                    <i class="icon-arrow-up"></i>
+                    <i class="fa fa-arrow-up"></i>
                 </div>
             </div>
         </div>

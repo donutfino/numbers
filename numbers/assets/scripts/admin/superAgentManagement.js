@@ -18,56 +18,76 @@ var agentEditable = function () {
             var jqTds = $('>td', nRow);
             jqTds[0].innerHTML = '<input type="text" class="form-control" style="width: 100px;" value="' + aData[0] + '">';
             jqTds[1].innerHTML = '<input type="text" class="form-control" style="width: 170px;" value="' + aData[1] + '">';
-            jqTds[2].innerHTML = '<input type="number" min="0" class="form-control right-align" style="width: 100px;" value="' + aData[2] + '">';
-            jqTds[3].innerHTML = '<input type="number" min="0" class="form-control right-align" style="width: 100px;" value="' + aData[3] + '">';
-            jqTds[4].innerHTML = selectActive(aData[4]);
-            jqTds[5].innerHTML = '<a class="save" href="">บันทึก</a>';
-            jqTds[6].innerHTML = '<a class="cancel" href="">ยกเลิก</a>';
-        }
-
-        function selectActive(activeName){
-            var output = '<select class="select-active" style="height:34px;">';
-
-            if(activeName == 'ผิด'){
-                output += '<option selected value="0">' + activeName + '</option>'; 
-                output += '<option value="1">' + "ถูก" + '</option>';  
-            } else if(activeName == "ถูก"){
-                output += '<option selected value="1">' + activeName + '</option>';  
-                output += '<option value="0">' + "ผิด" + '</option>'; 
-            } 
-            output += '</select>';
-
-            return output;
+            jqTds[2].innerHTML = '<input type="number" min="0" class="form-control right-align" style="width: 100%;" value="' + aData[2] + '">';
+            jqTds[3].innerHTML = '<input type="number" min="0" class="form-control right-align" style="width: 100%;" value="' + aData[3] + '">';
+            jqTds[4].innerHTML = '<input type="number" min="0" class="form-control right-align" style="width: 100%;" value="' + aData[4] + '">';
+            jqTds[5].innerHTML = '<input type="number" min="0" class="form-control right-align" style="width: 100%;" value="' + aData[5] + '">';
+            jqTds[6].innerHTML = '<input type="number" min="0" class="form-control right-align" style="width: 100%;" value="' + aData[6] + '">';
+            jqTds[7].innerHTML = '<input type="number" min="0" class="form-control right-align" style="width: 100%;" value="' + aData[7] + '">';
+            jqTds[8].innerHTML = '<input type="number" min="0" class="form-control right-align" style="width: 100%;" value="' + aData[8] + '">';
+            jqTds[9].innerHTML = '<input type="number" min="0" class="form-control right-align" style="width: 100%;" value="' + aData[9] + '">';
+            jqTds[10].innerHTML = '<a class="save" href="">บันทึก</a>';
+            jqTds[11].innerHTML = '<a class="cancel" href="">ยกเลิก</a>';
         }
 
         function saveRow(oTable, nRow) {
             var jqInputs = $('input', nRow);
-            var jqSelects=$('select.select-active', nRow);
-            if(jqSelects[0].value == 0){
-                var active = "ผิด";
-            }else{
-                var active = "ถูก";
-            }
-
-            if(jqInputs[2].value <= 0){
-                var msg = "เครดิตต้องมากกว่า 0";
+            if(jqInputs[2].value < 0){
+                var msg = "ลิมิตสามตัวหัวไม่สามารถน้อยกว่า 0";
                 var shortCutFunction = "error";
                 var title = "เกิดข้อผิดพลาด";
                 toastr[shortCutFunction](msg, title);
                 $('#toast-container').addClass('animated shake');
-            } else if(jqInputs[3].value != 30){
-                var msg = "คอมมิชชั่นเริ่มต้นที่ 30";
+            } else if(jqInputs[3].value < 0){
+                var msg = "ลิมิตสามตัวท้ายไม่สามารถน้อยกว่า 0";
+                var shortCutFunction = "error";
+                var title = "เกิดข้อผิดพลาด";
+                toastr[shortCutFunction](msg, title);
+                $('#toast-container').addClass('animated shake');
+            } else if(jqInputs[4].value < 0){
+                var msg = "ลิมิตโต๊ดสามตัวหัวหัวไม่สามารถน้อยกว่า 0";
+                var shortCutFunction = "error";
+                var title = "เกิดข้อผิดพลาด";
+                toastr[shortCutFunction](msg, title);
+                $('#toast-container').addClass('animated shake');
+            } else if(jqInputs[5].value < 0){
+                var msg = "ลิมิตโต๊ดสามตัวท้ายไม่สามารถน้อยกว่า 0";
+                var shortCutFunction = "error";
+                var title = "เกิดข้อผิดพลาด";
+                toastr[shortCutFunction](msg, title);
+                $('#toast-container').addClass('animated shake');
+            } else if(jqInputs[6].value < 0){
+                var msg = "ลิมิตบนไม่สามารถน้อยกว่า 0";
+                var shortCutFunction = "error";
+                var title = "เกิดข้อผิดพลาด";
+                toastr[shortCutFunction](msg, title);
+                $('#toast-container').addClass('animated shake');
+            } else if(jqInputs[7].value < 0){
+                var msg = "ลิมิตล่างไม่สามารถน้อยกว่า 0";
+                var shortCutFunction = "error";
+                var title = "เกิดข้อผิดพลาด";
+                toastr[shortCutFunction](msg, title);
+                $('#toast-container').addClass('animated shake');
+            } else if(jqInputs[8].value < 0){
+                var msg = "ลิมิตวิ่งบนไม่สามารถน้อยกว่า 0";
+                var shortCutFunction = "error";
+                var title = "เกิดข้อผิดพลาด";
+                toastr[shortCutFunction](msg, title);
+                $('#toast-container').addClass('animated shake');
+            } else if(jqInputs[9].value < 0){
+                var msg = "ลิมิตวิ่งล่างไม่สามารถน้อยกว่า 0";
                 var shortCutFunction = "error";
                 var title = "เกิดข้อผิดพลาด";
                 toastr[shortCutFunction](msg, title);
                 $('#toast-container').addClass('animated shake');
             } else {
-                var agent_id = $(nRow).attr("agent_id");
-                var data = {agent_name: jqInputs[0].value, email: jqInputs[1].value,
-                            credit: jqInputs[2].value, commision: jqInputs[3].value,                            
-                            active: jqSelects[0].value, agent_id: agent_id};
+                var id = $(nRow).attr("id");
+                var data = {name: jqInputs[0].value, email: jqInputs[1].value,                            
+                            headLimit: jqInputs[2].value, tailLimit: jqInputs[3].value, headSpecialLimit: jqInputs[4].value, tailSpecialLimit: jqInputs[5].value,
+                            topLimit: jqInputs[6].value, bottomLimit: jqInputs[7].value, topRunLimit: jqInputs[8].value, bottomRunLimit: jqInputs[9].value,
+                            id: id};
                 $.ajax({
-                    url : '/admin/settings/agentManagement/updateAgent',
+                    url : '/admin/settings/superAgentManagement/updateSuperAgent',
                     type : 'post',
                     data : data,
                     success : function(response) {
@@ -83,9 +103,14 @@ var agentEditable = function () {
                             oTable.fnUpdate(jqInputs[1].value, nRow, 1, false);
                             oTable.fnUpdate(jqInputs[2].value, nRow, 2, false);
                             oTable.fnUpdate(jqInputs[3].value, nRow, 3, false);
-                            oTable.fnUpdate(active, nRow, 4, false);
-                            oTable.fnUpdate('<a class="edit"><i class="fa fa-pencil">', nRow, 5, false);
-                            oTable.fnUpdate('<a class="delete-agent" agent_name="'+jqInputs[0].value+'" agent_id="'+agent_id+'" href=""><i class="fa fa-trash"></i></a>', nRow, 6, false);
+                            oTable.fnUpdate(jqInputs[4].value, nRow, 4, false);
+                            oTable.fnUpdate(jqInputs[5].value, nRow, 5, false);
+                            oTable.fnUpdate(jqInputs[6].value, nRow, 6, false);
+                            oTable.fnUpdate(jqInputs[7].value, nRow, 7, false);
+                            oTable.fnUpdate(jqInputs[8].value, nRow, 8, false);
+                            oTable.fnUpdate(jqInputs[9].value, nRow, 9, false);
+                            oTable.fnUpdate('<a class="edit"><i class="fa fa-pencil">', nRow, 10, false);
+                            oTable.fnUpdate('<a class="delete-agent" name="'+jqInputs[0].value+'" id="'+id+'" href=""><i class="fa fa-trash"></i></a>', nRow, 11, false);
                             oTable.fnDraw();
 
                             var shortCutFunction = "success";
@@ -177,9 +202,9 @@ var agentEditable = function () {
             if(confirm("คุณต้องการลบบัญชีหัวหน่วยหรือไม่?")){
                 
                 $.ajax({
-                    url : '/admin/settings/agentManagement/deleteAgent',
+                    url : '/admin/settings/superAgentManagement/deleteSuperAgent',
                     type : 'post',
-                    data : {agent_id:$(this).attr('agent_id'), agent_name:$(this).attr('agent_name')},
+                    data : {id:$(this).attr('id'), name:$(this).attr('name')},
                     success : function(response) { 
                             
                         if(response == "success") {
@@ -230,7 +255,7 @@ $(document).ready(function(){
         $('#toast-container').remove();
         
         $.ajax({
-            url : '/admin/settings/agentManagement/addAgent',
+            url : '/admin/settings/superAgentManagement/addSuperAgent',
             type : 'post',
             data : $(this).serialize(),
             success : function(response) { 

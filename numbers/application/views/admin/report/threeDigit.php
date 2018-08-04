@@ -78,6 +78,11 @@
                                             <span class="title">รายงานเลข 2 ตัว</span>
                                         </a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a href="/admin/reports/log" class="nav-link">
+                                            <span class="title">ประวัติ</span>
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                             <li class="nav-item">
@@ -105,6 +110,11 @@
                                     <li class="nav-item">
                                         <a href="/admin/settings/agentManagement" class="nav-link">
                                             <span class="title">จัดการหัวหน่วย</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="/admin/settings/superAgentManagement" class="nav-link">
+                                            <span class="title">การจัดการเจ้ามือ</span>
                                         </a>
                                     </li>
                                     <li class="nav-item">
@@ -222,18 +232,20 @@
                                         <table class="table main table-bordered table-hover" sortable-table="headNewSentSortObject" ng-hide="headFlag">
                                             <thead>
                                                 <tr>
-                                                    <th colspan="3">หัว(000-999)</th>
+                                                    <th colspan="{{agents.length + 3}}">หัว(000-999)</th>
                                                 </tr>
                                                 <tr>
                                                   <th scope="col" class="width-110" sortable-column="number">เลข</th>
-                                                  <th scope="col" class="width-110">ส่งรอบใหม่</th>
+                                                  <td scope="col" class="width-110" ng-repeat = "agent in agents">{{agent.name}}</td>
+                                                  <th scope="col" class="width-110">เกิน</th>
                                                   <th scope="col" class="width-110">ถือ</th>
                                                 </tr>                                                
                                             </thead>
                                             <tbody>
                                                 <tr ng-repeat="item in heads | orderBy:'-(amount-sent)' | sortTable: headNewSentSortObject" ng-if="item.hold > headLimit">
                                                     <td class="left-align width-110">{{item.number}}</td>
-                                                    <td class="right-align width-110">{{formatAmount(item.amount-item.sent-headLimit)}}</td>
+                                                    <td class="right-align width-110" ng-repeat = "agent in agents" ng-class="{'all-sent':getAgentExceed(item.amount, 'Head') > 0 }">{{getAgentSentFormat(item.amount, $index, "Head")}}</td>
+                                                    <td class="right-align width-110">{{getAgentExceedFormat(item.amount, "Head")}}</td>
                                                     <td class="right-align width-110">{{formatAmount(headLimit)}}</td>
                                                 </tr>
                                             </tbody>
@@ -304,18 +316,20 @@
                                         <table class="table main table-bordered table-hover" sortable-table="tailNewSentSortObject" ng-hide="tailFlag">
                                             <thead>
                                                 <tr>
-                                                    <th colspan="3">ท้าย(000-999)</th>
+                                                    <th colspan="{{agents.length + 3}}">ท้าย(000-999)</th>
                                                 </tr>
                                                 <tr>
                                                   <th scope="col" class="width-110" sortable-column="number">เลข</th>
-                                                  <th scope="col" class="width-110">ส่งรอบใหม่</th>
+                                                  <td scope="col" class="width-110" ng-repeat = "agent in agents">{{agent.name}}</td>
+                                                  <th scope="col" class="width-110">เกิน</th>
                                                   <th scope="col" class="width-110">ถือ</th>
                                                 </tr>                                                
                                             </thead>
                                             <tbody>
                                                 <tr ng-repeat="item in tails | orderBy:'-(amount-sent)' | sortTable: tailNewSentSortObject" ng-if="item.hold > tailLimit">
                                                     <td class="left-align width-110">{{item.number}}</td>
-                                                    <td class="right-align width-110">{{formatAmount(item.amount-item.sent-tailLimit)}}</td>
+                                                    <td class="right-align width-110" ng-repeat = "agent in agents" ng-class="{'all-sent':getAgentExceed(item.amount, 'Tail') > 0 }">{{getAgentSentFormat(item.amount, $index, "Tail")}}</td>
+                                                    <td class="right-align width-110">{{getAgentExceedFormat(item.amount, "Tail")}}</td>
                                                     <td class="right-align width-110">{{formatAmount(tailLimit)}}</td>
                                                 </tr>
                                             </tbody>
@@ -386,18 +400,20 @@
                                         <table class="table main table-bordered table-hover" sortable-table="headSpecialNewSentSortObject" ng-hide="headSpecialFlag">
                                             <thead>
                                                 <tr>
-                                                    <th colspan="3">โต๊ดหัว(000-999)</th>
+                                                    <th colspan="{{agents.length + 3}}">โต๊ดหัว(000-999)</th>
                                                 </tr>
                                                 <tr>
                                                   <th scope="col" class="width-110" sortable-column="number">เลข</th>
-                                                  <th scope="col" class="width-110">ส่งรอบใหม่</th>
+                                                  <td scope="col" class="width-110" ng-repeat = "agent in agents">{{agent.name}}</td>
+                                                  <th scope="col" class="width-110">เกิน</th>
                                                   <th scope="col" class="width-110">ถือ</th>
                                                 </tr>                                                
                                             </thead>
                                             <tbody>
                                                 <tr ng-repeat="item in headSpecials | orderBy:'-(amount-sent)' | sortTable: headSpecialNewSentSortObject" ng-if="item.hold > headSpecialLimit">
                                                     <td class="left-align width-110">{{item.number}}</td>
-                                                    <td class="right-align width-110">{{formatAmount(item.amount-item.sent-headSpecialLimit)}}</td>
+                                                    <td class="right-align width-110" ng-repeat = "agent in agents" ng-class="{'all-sent':getAgentExceed(item.amount, 'Head Special') > 0 }">{{getAgentSentFormat(item.amount, $index, "Head Special")}}</td>
+                                                    <td class="right-align width-110">{{getAgentExceedFormat(item.amount, "Head Special")}}</td>
                                                     <td class="right-align width-110">{{formatAmount(headSpecialLimit)}}</td>
                                                 </tr>
                                             </tbody>
@@ -468,18 +484,20 @@
                                         <table class="table main table-bordered table-hover" sortable-table="tailSpecialNewSentSortObject" ng-hide="tailSpecialFlag">
                                             <thead>
                                                 <tr>
-                                                    <th colspan="3">โต๊ด้ทาย(000-999)</th>
+                                                    <th colspan="{{agents.length + 3}}">โต๊ด้ทาย(000-999)</th>
                                                 </tr>
                                                 <tr>
                                                   <th scope="col" class="width-110" sortable-column="number">เลข</th>
-                                                  <th scope="col" class="width-110">ส่งรอบใหม่</th>
+                                                  <td scope="col" class="width-110" ng-repeat = "agent in agents">{{agent.name}}</td>
+                                                  <th scope="col" class="width-110">เกิน</th>
                                                   <th scope="col" class="width-110">ถือ</th>
                                                 </tr>                                                
                                             </thead>
                                             <tbody>
                                                 <tr ng-repeat="item in tailSpecials | orderBy:'-(amount-sent)' | sortTable: tailSpecialNewSentSortObject" ng-if="item.hold > tailSpecialLimit">
                                                     <td class="left-align width-110">{{item.number}}</td>
-                                                    <td class="right-align width-110">{{formatAmount(item.amount-item.sent-tailSpecialLimit)}}</td>
+                                                    <td class="right-align width-110" ng-repeat = "agent in agents" ng-class="{'all-sent':getAgentExceed(item.amount, 'Tail Special') > 0 }">{{getAgentSentFormat(item.amount, $index, "Tail Special")}}</td>
+                                                    <td class="right-align width-110">{{getAgentExceedFormat(item.amount, "Tail Special")}}</td>
                                                     <td class="right-align width-110">{{formatAmount(tailSpecialLimit)}}</td>
                                                 </tr>
                                             </tbody>
@@ -490,80 +508,280 @@
                             <?php }?>
                         </div>
                         <div id="head-print">
-                            <div id="hidden_div" style="display: none;" >
-                                <h2 style="text-align: center;">หัว</h2>
-                                <div style="margin:20px 0px 10px 0px; border-top: solid 1px #000;"></div>
-                                <ul style="list-style-type: none;font-family:TAHOMA;font-size:24px;height:80vh;-webkit-columns: 4;-moz-columns: 4;columns: 4;-moz-column-fill: auto;column-fill: auto;">
-                                    <li ng-repeat="item in heads | orderBy:'-(amount-sent)'" ng-if="item.hold > headLimit" style="padding-bottom: 12px;">
-                                        <span>{{item.number}}</span>
-                                        <span> = </span>
-                                        <span>{{formatAmount(item.amount-item.sent-headLimit)}}</span> 
-                                    </li>
-                                </ul>
-                                <div style="margin-top:10px; border-top: solid 1px #000; border-bottom: solid 1px #000;">
-                                    <div style="width: 25%; display: inline-block !important;"></div>
-                                    <div style="width: 25%; display: inline-block !important;"></div>
-                                    <div style="width: 25%; display: inline-block !important;"></div>
-                                    <div style="font-family:TAHOMA;font-size:24px;width: 20%; display: inline-block !important; padding:5px 0px 4px 0px;"><span style="padding:5px; border-right:1px solid #000;">รวม</span><span style="padding-left: 10px">{{formatAmount(headTotalNewSent)}} </span></div>
+                            <div id="hidden_div" style="display: none;">
+                                <div style="display: block; page-break-before: always;">
+                                    <div style="height: 40px;">
+                                        <h2 style="text-align: center;">3 ตัวหัว</h2>
+                                        <h2 style="float: right; margin-top: -45px;">{{period}}</h2>
+                                    </div>
+                                    <h2 style="text-align: center;">Total</h2>
+                                    <div style="margin:20px 0px 10px 0px; border-top: solid 1px #000;"></div>
+                                    <ul style="min-height:78vh;list-style-type: none;font-family:TAHOMA;font-size:24px;-webkit-columns: 4;-moz-columns: 4;columns: 4;-moz-column-fill: auto;column-fill: auto;">
+                                        <li ng-repeat="item in heads | orderBy:'-(amount-sent)'" ng-if="item.hold > headLimit" style="padding-bottom: 12px;">
+                                            <span>{{item.number}}</span>
+                                            <span> = </span>
+                                            <span>{{formatAmount(item.amount-item.sent-headLimit)}}</span> 
+                                        </li>
+                                    </ul>
+                                    <div style="margin-top:10px; border-top: solid 1px #000; border-bottom: solid 1px #000;">
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="font-family:TAHOMA;font-size:24px;width: 20%; display: inline-block !important; padding:5px 0px 4px 0px;"><span style="padding:5px; border-right:1px solid #000;">รวม</span><span style="padding-left: 10px">{{formatAmount(headTotalNewSent)}} </span></div>
+                                    </div>
                                 </div>
+                                
+                                <div ng-repeat="agent in agents" ng-init="agentNumber = $index" style="display: block; page-break-before: always;">
+                                    <div style="height: 40px;">
+                                        <h2 style="text-align: center;">3 ตัวหัว</h2>
+                                        <h2 style="float: right; margin-top: -45px;">{{period}}</h2>
+                                    </div>                                    
+                                    <h2 style="text-align: center;">{{agent.name}}</h2>
+                                    <div style="margin:20px 0px 10px 0px; border-top: solid 1px #000;"></div>
+                                    <ul style="min-height:78vh;list-style-type: none;font-family:TAHOMA;font-size:24px;-webkit-columns: 4;-moz-columns: 4;columns: 4;-moz-column-fill: auto;column-fill: auto;">
+                                        <li ng-repeat="item in heads | orderBy:'-(amount-sent)'" ng-if="(item.hold > headLimit) && (getAgentSent(item.amount, agentNumber, 'Head') > 0)" style="padding-bottom: 12px;">
+                                            <span>{{item.number}}</span>
+                                            <span> = </span>
+                                            <span>{{getAgentSentFormat(item.amount, agentNumber, "Head")}}</span> 
+                                        </li>
+                                    </ul>
+                                    <div style="margin-top:10px; border-top: solid 1px #000; border-bottom: solid 1px #000;">
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="font-family:TAHOMA;font-size:24px;width: 20%; display: inline-block !important; padding:5px 0px 4px 0px;"><span style="padding:5px; border-right:1px solid #000;">รวม</span><span style="padding-left: 10px">{{getTotalAgentSentFormat(agentNumber, "Head")}} </span></div>
+                                    </div>                                    
+                                </div>
+
+                                <div style="display: block; page-break-before: always;">
+                                    <div style="height: 40px;">
+                                        <h2 style="text-align: center;">3 ตัวหัว</h2>
+                                        <h2 style="float: right; margin-top: -45px;">{{period}}</h2>
+                                    </div>                                    
+                                    <h2 style="text-align: center;">เกิน</h2>
+                                    <div style="margin:20px 0px 10px 0px; border-top: solid 1px #000;"></div>
+                                    <ul style="min-height:78vh;list-style-type: none;font-family:TAHOMA;font-size:24px;-webkit-columns: 4;-moz-columns: 4;columns: 4;-moz-column-fill: auto;column-fill: auto;">
+                                        <li ng-repeat="item in heads | orderBy:'-(amount-sent)'" ng-if="(item.hold > headLimit) && (getAgentExceed(item.amount, 'Head') > 0)" style="padding-bottom: 12px;">
+                                            <span>{{item.number}}</span>
+                                            <span> = </span>
+                                            <span>{{getAgentExceedFormat(item.amount, "Head")}}</span> 
+                                        </li>
+                                    </ul>
+                                    <div style="margin-top:10px; border-top: solid 1px #000; border-bottom: solid 1px #000;">
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="font-family:TAHOMA;font-size:24px;width: 20%; display: inline-block !important; padding:5px 0px 4px 0px;"><span style="padding:5px; border-right:1px solid #000;">รวม</span><span style="padding-left: 10px">{{getTotalExceedFormat("Head")}} </span></div>
+                                    </div>
+                                </div>                                
                             </div>                            
                         </div>
                         <div id="tail-print">
                             <div id="hidden_div" style="display: none;">
-                                <h2 style="text-align: center;">ท้าย</h2>
-                                <div style="margin:20px 0px 10px 0px; border-top: solid 1px #000;"></div>
-                                <ul style="list-style-type: none;font-family:TAHOMA;font-size:24px;height:80vh;-webkit-columns: 4;-moz-columns: 4;columns: 4;-moz-column-fill: auto;column-fill: auto;">
-                                    <li ng-repeat="item in tails | orderBy:'-(amount-sent)'" ng-if="item.hold > tailLimit" style="padding-bottom: 12px;">
-                                        <span>{{item.number}}</span>
-                                        <span> = </span>
-                                        <span>{{formatAmount(item.amount-item.sent-tailLimit)}}</span> 
-                                    </li>
-                                </ul>
-                                <div style="margin-top:10px; border-top: solid 1px #000; border-bottom: solid 1px #000;">
-                                    <div style="width: 25%; display: inline-block !important;"></div>
-                                    <div style="width: 25%; display: inline-block !important;"></div>
-                                    <div style="width: 25%; display: inline-block !important;"></div>
-                                    <div style="font-family:TAHOMA;font-size:24px;width: 20%; display: inline-block !important; padding:5px 0px 4px 0px;"><span style="padding:5px; border-right:1px solid #000;">รวม</span><span style="padding-left: 10px">{{formatAmount(tailTotalNewSent)}} </span></div>
+                                <div style="display: block; page-break-before: always;">
+                                    <div style="height: 40px;">
+                                        <h2 style="text-align: center;">3 ตัวท้าย</h2>
+                                        <h2 style="float: right; margin-top: -45px;">{{period}}</h2>
+                                    </div>
+                                    <h2 style="text-align: center;">Total</h2>
+                                    <div style="margin:20px 0px 10px 0px; border-top: solid 1px #000;"></div>
+                                    <ul style="min-height:78vh;list-style-type: none;font-family:TAHOMA;font-size:24px;-webkit-columns: 4;-moz-columns: 4;columns: 4;-moz-column-fill: auto;column-fill: auto;">
+                                        <li ng-repeat="item in tails | orderBy:'-(amount-sent)'" ng-if="item.hold > tailLimit" style="padding-bottom: 12px;">
+                                            <span>{{item.number}}</span>
+                                            <span> = </span>
+                                            <span>{{formatAmount(item.amount-item.sent-tailLimit)}}</span> 
+                                        </li>
+                                    </ul>
+                                    <div style="margin-top:10px; border-top: solid 1px #000; border-bottom: solid 1px #000;">
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="font-family:TAHOMA;font-size:24px;width: 20%; display: inline-block !important; padding:5px 0px 4px 0px;"><span style="padding:5px; border-right:1px solid #000;">รวม</span><span style="padding-left: 10px">{{formatAmount(tailTotalNewSent)}} </span></div>
+                                    </div>
                                 </div>
-                            </div>                            
+                                
+                                <div ng-repeat="agent in agents" ng-init="agentNumber = $index" style="display: block; page-break-before: always;">
+                                    <div style="height: 40px;">
+                                        <h2 style="text-align: center;">3 ตัวท้าย</h2>
+                                        <h2 style="float: right; margin-top: -45px;">{{period}}</h2>
+                                    </div>                                    
+                                    <h2 style="text-align: center;">{{agent.name}}</h2>
+                                    <div style="margin:20px 0px 10px 0px; border-top: solid 1px #000;"></div>
+                                    <ul style="min-height:78vh;list-style-type: none;font-family:TAHOMA;font-size:24px;-webkit-columns: 4;-moz-columns: 4;columns: 4;-moz-column-fill: auto;column-fill: auto;">
+                                        <li ng-repeat="item in tails | orderBy:'-(amount-sent)'" ng-if="(item.hold > tailLimit) && (getAgentSent(item.amount, agentNumber, 'Tail') > 0)" style="padding-bottom: 12px;">
+                                            <span>{{item.number}}</span>
+                                            <span> = </span>
+                                            <span>{{getAgentSentFormat(item.amount, agentNumber, "Tail")}}</span> 
+                                        </li>
+                                    </ul>
+                                    <div style="margin-top:10px; border-top: solid 1px #000; border-bottom: solid 1px #000;">
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="font-family:TAHOMA;font-size:24px;width: 20%; display: inline-block !important; padding:5px 0px 4px 0px;"><span style="padding:5px; border-right:1px solid #000;">รวม</span><span style="padding-left: 10px">{{getTotalAgentSentFormat(agentNumber, "Tail")}} </span></div>
+                                    </div>                                    
+                                </div>
+
+                                <div style="display: block; page-break-before: always;">
+                                    <div style="height: 40px;">
+                                        <h2 style="text-align: center;">3 ตัวท้าย</h2>
+                                        <h2 style="float: right; margin-top: -45px;">{{period}}</h2>
+                                    </div>                                    
+                                    <h2 style="text-align: center;">เกิน</h2>
+                                    <div style="margin:20px 0px 10px 0px; border-top: solid 1px #000;"></div>
+                                    <ul style="min-height:78vh;list-style-type: none;font-family:TAHOMA;font-size:24px;-webkit-columns: 4;-moz-columns: 4;columns: 4;-moz-column-fill: auto;column-fill: auto;">
+                                        <li ng-repeat="item in tails | orderBy:'-(amount-sent)'" ng-if="(item.hold > tailLimit) && (getAgentExceed(item.amount, 'Tail') > 0)" style="padding-bottom: 12px;">
+                                            <span>{{item.number}}</span>
+                                            <span> = </span>
+                                            <span>{{getAgentExceedFormat(item.amount, "Tail")}}</span> 
+                                        </li>
+                                    </ul>
+                                    <div style="margin-top:10px; border-top: solid 1px #000; border-bottom: solid 1px #000;">
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="font-family:TAHOMA;font-size:24px;width: 20%; display: inline-block !important; padding:5px 0px 4px 0px;"><span style="padding:5px; border-right:1px solid #000;">รวม</span><span style="padding-left: 10px">{{getTotalExceedFormat("Tail")}} </span></div>
+                                    </div>
+                                </div>                                
+                            </div>                     
                         </div>
                         <div id="head-special-print">
                             <div id="hidden_div" style="display: none;">
-                                <h2 style="text-align: center;">โต๊ดหัว</h2>
-                                <div style="margin:20px 0px 10px 0px; border-top: solid 1px #000;"></div>
-                                <ul style="list-style-type: none;font-family:TAHOMA;font-size:24px;height:80vh;-webkit-columns: 4;-moz-columns: 4;columns: 4;-moz-column-fill: auto;column-fill: auto;">
-                                    <li ng-repeat="item in headSpecials | orderBy:'-(amount-sent)'" ng-if="item.hold > headSpecialLimit" style="padding-bottom: 12px;">
-                                        <span>{{item.number}}</span>
-                                        <span> = </span>
-                                        <span>{{formatAmount(item.amount-item.sent-headSpecialLimit)}}</span> 
-                                    </li>
-                                </ul>
-                                <div style="margin-top:10px; border-top: solid 1px #000; border-bottom: solid 1px #000;">
-                                    <div style="width: 25%; display: inline-block !important;"></div>
-                                    <div style="width: 25%; display: inline-block !important;"></div>
-                                    <div style="width: 25%; display: inline-block !important;"></div>
-                                    <div style="font-family:TAHOMA;font-size:24px;width: 20%; display: inline-block !important; padding:5px 0px 4px 0px;"><span style="padding:5px; border-right:1px solid #000;">รวม</span><span style="padding-left: 10px">{{formatAmount(headSpecialTotalNewSent)}} </span></div>
+                                <div style="display: block; page-break-before: always;">
+                                    <div style="height: 40px;">
+                                        <h2 style="text-align: center;">โต๊ดหัว</h2>
+                                        <h2 style="float: right; margin-top: -45px;">{{period}}</h2>
+                                    </div>
+                                    <h2 style="text-align: center;">Total</h2>
+                                    <div style="margin:20px 0px 10px 0px; border-top: solid 1px #000;"></div>
+                                    <ul style="min-height:78vh;list-style-type: none;font-family:TAHOMA;font-size:24px;-webkit-columns: 4;-moz-columns: 4;columns: 4;-moz-column-fill: auto;column-fill: auto;">
+                                        <li ng-repeat="item in headSpecials | orderBy:'-(amount-sent)'" ng-if="item.hold > headSpecialLimit" style="padding-bottom: 12px;">
+                                            <span>{{item.number}}</span>
+                                            <span> = </span>
+                                            <span>{{formatAmount(item.amount-item.sent-headSpecialLimit)}}</span> 
+                                        </li>
+                                    </ul>
+                                    <div style="margin-top:10px; border-top: solid 1px #000; border-bottom: solid 1px #000;">
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="font-family:TAHOMA;font-size:24px;width: 20%; display: inline-block !important; padding:5px 0px 4px 0px;"><span style="padding:5px; border-right:1px solid #000;">รวม</span><span style="padding-left: 10px">{{formatAmount(headSpecialTotalNewSent)}} </span></div>
+                                    </div>
                                 </div>
-                            </div>                            
+
+                                <div ng-repeat="agent in agents" ng-init="agentNumber = $index" style="display: block; page-break-before: always;">
+                                    <div style="height: 40px;">
+                                        <h2 style="text-align: center;">โต๊ดหัว</h2>
+                                        <h2 style="float: right; margin-top: -45px;">{{period}}</h2>
+                                    </div>                                    
+                                    <h2 style="text-align: center;">{{agent.name}}</h2>
+                                    <div style="margin:20px 0px 10px 0px; border-top: solid 1px #000;"></div>
+                                    <ul style="min-height:78vh;list-style-type: none;font-family:TAHOMA;font-size:24px;-webkit-columns: 4;-moz-columns: 4;columns: 4;-moz-column-fill: auto;column-fill: auto;">
+                                        <li ng-repeat="item in headSpecials | orderBy:'-(amount-sent)'" ng-if="(item.hold > headSpecialLimit) && (getAgentSent(item.amount, agentNumber, 'Head Special') > 0)" style="padding-bottom: 12px;">
+                                            <span>{{item.number}}</span>
+                                            <span> = </span>
+                                            <span>{{getAgentSentFormat(item.amount, agentNumber, "Head Special")}}</span> 
+                                        </li>
+                                    </ul>
+                                    <div style="margin-top:10px; border-top: solid 1px #000; border-bottom: solid 1px #000;">
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="font-family:TAHOMA;font-size:24px;width: 20%; display: inline-block !important; padding:5px 0px 4px 0px;"><span style="padding:5px; border-right:1px solid #000;">รวม</span><span style="padding-left: 10px">{{getTotalAgentSentFormat(agentNumber, "Head Special")}} </span></div>
+                                    </div>                                    
+                                </div>
+
+                                <div style="display: block; page-break-before: always;">
+                                    <div style="height: 40px;">
+                                        <h2 style="text-align: center;">โต๊ดหัว</h2>
+                                        <h2 style="float: right; margin-top: -45px;">{{period}}</h2>
+                                    </div>                                    
+                                    <h2 style="text-align: center;">เกิน</h2>
+                                    <div style="margin:20px 0px 10px 0px; border-top: solid 1px #000;"></div>
+                                    <ul style="min-height:78vh;list-style-type: none;font-family:TAHOMA;font-size:24px;-webkit-columns: 4;-moz-columns: 4;columns: 4;-moz-column-fill: auto;column-fill: auto;">
+                                        <li ng-repeat="item in headSpecials | orderBy:'-(amount-sent)'" ng-if="(item.hold > headSpecialLimit) && (getAgentExceed(item.amount, 'Head Special') > 0)" style="padding-bottom: 12px;">
+                                            <span>{{item.number}}</span>
+                                            <span> = </span>
+                                            <span>{{getAgentExceedFormat(item.amount, "Head Special")}}</span> 
+                                        </li>
+                                    </ul>
+                                    <div style="margin-top:10px; border-top: solid 1px #000; border-bottom: solid 1px #000;">
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="font-family:TAHOMA;font-size:24px;width: 20%; display: inline-block !important; padding:5px 0px 4px 0px;"><span style="padding:5px; border-right:1px solid #000;">รวม</span><span style="padding-left: 10px">{{getTotalExceedFormat("Head Special")}}</span></div>
+                                    </div>
+                                </div>                                
+                            </div>
                         </div>
                         <div id="tail-special-print">
                             <div id="hidden_div" style="display: none;">
-                                <h2 style="text-align: center;">โต๊ด้ทาย</h2>
-                                <div style="margin:20px 0px 10px 0px; border-top: solid 1px #000;"></div>
-                                <ul style="list-style-type: none;font-family:TAHOMA;font-size:24px;height:80vh;-webkit-columns: 4;-moz-columns: 4;columns: 4;-moz-column-fill: auto;column-fill: auto;">
-                                    <li ng-repeat="item in tailSpecials | orderBy:'-(amount-sent)'" ng-if="item.hold > tailSpecialLimit" style="padding-bottom: 12px;">
-                                        <span>{{item.number}}</span>
-                                        <span> = </span>
-                                        <span>{{formatAmount(item.amount-item.sent-tailSpecialLimit)}}</span> 
-                                    </li>
-                                </ul>
-                                <div style="margin-top:10px; border-top: solid 1px #000; border-bottom: solid 1px #000;">
-                                    <div style="width: 25%; display: inline-block !important;"></div>
-                                    <div style="width: 25%; display: inline-block !important;"></div>
-                                    <div style="width: 25%; display: inline-block !important;"></div>
-                                    <div style="font-family:TAHOMA;font-size:24px;width: 20%; display: inline-block !important; padding:5px 0px 4px 0px;"><span style="padding:5px; border-right:1px solid #000;">รวม</span><span style="padding-left: 10px">{{formatAmount(tailSpecialTotalNewSent)}} </span></div>
+                                <div style="display: block; page-break-before: always;">
+                                    <div style="height: 40px;">
+                                        <h2 style="text-align: center;">โต๊ดท้าย</h2>
+                                        <h2 style="float: right; margin-top: -45px;">{{period}}</h2>
+                                    </div>
+                                    <h2 style="text-align: center;">Total</h2>
+                                    <div style="margin:20px 0px 10px 0px; border-top: solid 1px #000;"></div>
+                                    <ul style="min-height:78vh;list-style-type: none;font-family:TAHOMA;font-size:24px;-webkit-columns: 4;-moz-columns: 4;columns: 4;-moz-column-fill: auto;column-fill: auto;">
+                                        <li ng-repeat="item in tailSpecials | orderBy:'-(amount-sent)'" ng-if="item.hold > tailSpecialLimit" style="padding-bottom: 12px;">
+                                            <span>{{item.number}}</span>
+                                            <span> = </span>
+                                            <span>{{formatAmount(item.amount-item.sent-tailSpecialLimit)}}</span> 
+                                        </li>
+                                    </ul>
+                                    <div style="margin-top:10px; border-top: solid 1px #000; border-bottom: solid 1px #000;">
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="font-family:TAHOMA;font-size:24px;width: 20%; display: inline-block !important; padding:5px 0px 4px 0px;"><span style="padding:5px; border-right:1px solid #000;">รวม</span><span style="padding-left: 10px">{{formatAmount(tailSpecialTotalNewSent)}} </span></div>
+                                    </div>
                                 </div>
-                            </div>                            
+                                
+                                <div ng-repeat="agent in agents" ng-init="agentNumber = $index" style="display: block; page-break-before: always;">
+                                    <div style="height: 40px;">
+                                        <h2 style="text-align: center;">โต๊ดท้าย</h2>
+                                        <h2 style="float: right; margin-top: -45px;">{{period}}</h2>
+                                    </div>                                    
+                                    <h2 style="text-align: center;">{{agent.name}}</h2>
+                                    <div style="margin:20px 0px 10px 0px; border-top: solid 1px #000;"></div>
+                                    <ul style="min-height:78vh;list-style-type: none;font-family:TAHOMA;font-size:24px;-webkit-columns: 4;-moz-columns: 4;columns: 4;-moz-column-fill: auto;column-fill: auto;">
+                                        <li ng-repeat="item in tailSpecials | orderBy:'-(amount-sent)'" ng-if="(item.hold > tailSpecialLimit) && (getAgentSent(item.amount, agentNumber, 'Tail Special') > 0)" style="padding-bottom: 12px;">
+                                            <span>{{item.number}}</span>
+                                            <span> = </span>
+                                            <span>{{getAgentSentFormat(item.amount, agentNumber, "Tail Special")}}</span> 
+                                        </li>
+                                    </ul>
+                                    <div style="margin-top:10px; border-top: solid 1px #000; border-bottom: solid 1px #000;">
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="font-family:TAHOMA;font-size:24px;width: 20%; display: inline-block !important; padding:5px 0px 4px 0px;"><span style="padding:5px; border-right:1px solid #000;">รวม</span><span style="padding-left: 10px">{{getTotalAgentSentFormat(agentNumber, "Tail Special")}} </span></div>
+                                    </div>                                    
+                                </div>
+
+                                <div style="display: block; page-break-before: always;">
+                                    <div style="height: 40px;">
+                                        <h2 style="text-align: center;">โต๊ดท้าย</h2>
+                                        <h2 style="float: right; margin-top: -45px;">{{period}}</h2>
+                                    </div>                                    
+                                    <h2 style="text-align: center;">เกิน</h2>
+                                    <div style="margin:20px 0px 10px 0px; border-top: solid 1px #000;"></div>
+                                    <ul style="min-height:78vh;list-style-type: none;font-family:TAHOMA;font-size:24px;-webkit-columns: 4;-moz-columns: 4;columns: 4;-moz-column-fill: auto;column-fill: auto;">
+                                        <li ng-repeat="item in tailSpecials | orderBy:'-(amount-sent)'" ng-if="(item.hold > tailSpecialLimit) && (getAgentExceed(item.amount, 'Tail Special') > 0)" style="padding-bottom: 12px;">
+                                            <span>{{item.number}}</span>
+                                            <span> = </span>
+                                            <span>{{getAgentExceedFormat(item.amount, "Tail Special")}}</span> 
+                                        </li>
+                                    </ul>
+                                    <div style="margin-top:10px; border-top: solid 1px #000; border-bottom: solid 1px #000;">
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="width: 25%; display: inline-block !important;"></div>
+                                        <div style="font-family:TAHOMA;font-size:24px;width: 20%; display: inline-block !important; padding:5px 0px 4px 0px;"><span style="padding:5px; border-right:1px solid #000;">รวม</span><span style="padding-left: 10px">{{getTotalExceedFormat("Tail Special")}}</span></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -767,10 +985,10 @@
                 </div>
             </div>
             <div class="page-footer">
-                <div class="page-footer-inner"> 2018 &copy; All rights reserved
+                <div class="page-footer-inner"> <?php echo date('Y');?> &copy; All rights reserved
                 </div>
                 <div class="scroll-to-top">
-                    <i class="icon-arrow-up"></i>
+                    <i class="fa fa-arrow-up"></i>
                 </div>
             </div>
         </div>

@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class AgentManagement extends Base_Controller {
+class SuperAgentManagement extends Base_Controller {
 
 	public function __construct()
     {
@@ -20,64 +20,55 @@ class AgentManagement extends Base_Controller {
 
 		if(!empty($orgs)){
 			$content['org_id'] = $orgs[0]->org_id;
-			$this->load->model("admin/agentManagementModel", "agent", true);
+			$this->load->model("admin/superAgentModel", "super_agent", true);
 			$condition = array(
 				'org_id' => $content['org_id']
 			);
-			$content['agents'] = $this->agent->getAgentsByOrgId($condition);
+			$content['agents'] = $this->super_agent->getSuperAgentsByOrgId($condition);
 
 		}else{
 			$content['org_id'] = -1;
     	}
 
-		$this->load->view('admin/settings/agentManagement', $content);
+		$this->load->view('admin/settings/superAgentManagement', $content);
 	}
 
-	public function getAgentsByOrg(){
+	public function getSuperAgentsByOrg(){
 		$request = json_decode(file_get_contents("php://input"));
 		$org_id = $request->org_id;
 		$condition = array(
 			"org_id" => $org_id
 		);
-		$this->load->model("admin/agentManagementModel", "agent", true);
-		$res = $this->agent->getAgentsByOrgId($condition);
+		$this->load->model("admin/superAgentModel", "super_agent", true);
+		$res = $this->super_agent->getSuperAgentsByOrgId($condition);
      
         return $this->output
 					->set_content_type('application/json')
 					->set_output(json_encode($res));
 	}
 
-	public function addAgent(){
+	public function addSuperAgent(){
 		$this->load->library('form_validation');
-		$this->form_validation->set_rules('agent_name', 'ชื่อหัวหน่วย', 'required');
+		$this->form_validation->set_rules('name', 'ชื่อหัวหน่วย', 'required');
         $this->form_validation->set_rules('email', 'อีเมล', 'required|valid_email|callback_emailCheck');
-        $this->form_validation->set_rules('credit', 'เครดิต', 'required');
-        $this->form_validation->set_rules('commision', 'คอมมิชชั่น', 'required');
-        $this->form_validation->set_rules('active', 'ใช้งาน', 'required');
         $this->form_validation->set_rules('org_id', 'เจ้ามือ', 'required');
 
         if ($this->form_validation->run() == FALSE) {
            	$res = array('state' => false, 'msg' => validation_errors());
         } else {
         	
-			$agent_name = $this->input->post("agent_name");
+			$name = $this->input->post("name");
 			$email = $this->input->post("email");
-			$credit = $this->input->post("credit");
-			$commision = $this->input->post("commision");
-			$active = $this->input->post("active");
 			$org_id = $this->input->post("org_id");			
 
 			$data = array(
-				"agent_name" => $agent_name,
+				"name" => $name,
 				"email" => $email,
-				"credit" => $credit,
-				"commision" => $commision,
-				"active" => $active,
 				"org_id" => $org_id
 			);
-			$this->load->model("admin/agentManagementModel", "agent", true);
-			$agent_id = $this->agent->addAgent($data);
-			if($agent_id > 0){
+			$this->load->model("admin/superAgentModel", "super_agent", true);
+			$inserted_id = $this->super_agent->addSuperAgent($data);
+			if($inserted_id > 0){
 				$res   = array('state' => true, 'msg' => 'เพิ่มหัวหน่วยสำเร็จ');
 				$toast = array('state' => true, 'msg' => 'เพิ่มหัวหน่วยสำเร็จ');
 				$this->session->set_flashdata('toast', $toast);
@@ -91,43 +82,49 @@ class AgentManagement extends Base_Controller {
 					->set_output(json_encode($res));
 	}
 
-	public function updateAgent(){
+	public function updateSuperAgent(){
 
 		$this->load->library('form_validation');
-		$this->form_validation->set_rules('agent_name', 'ชื่อหัวหน่วย', 'required');
+		$this->form_validation->set_rules('name', 'ชื่อหัวหน่วย', 'required');
         $this->form_validation->set_rules('email', 'อีเมล', 'required|valid_email');
-        $this->form_validation->set_rules('credit', 'เครดิต', 'required');
-        $this->form_validation->set_rules('commision', 'คอมมิชชั่น', 'required');
-        $this->form_validation->set_rules('active', 'ใช้งาน', 'required');
 
         if ($this->form_validation->run() == FALSE) {
            	$res = array('state' => false, 'msg' => validation_errors());
         } else {
-        	$agent_name = $this->input->post("agent_name");
+        	$name = $this->input->post("name");
 			$email = $this->input->post("email");
-			$credit = $this->input->post("credit");
-			$commision = $this->input->post("commision");
-			$active = $this->input->post("active");
-			$agent_id = $this->input->post("agent_id");
+			$headLimit = $this->input->post("headLimit");
+			$tailLimit = $this->input->post("tailLimit");
+			$headSpecialLimit = $this->input->post("headSpecialLimit");
+			$tailSpecialLimit = $this->input->post("tailSpecialLimit");
+			$topLimit = $this->input->post("topLimit");
+			$bottomLimit = $this->input->post("bottomLimit");
+			$topRunLimit = $this->input->post("topRunLimit");
+			$bottomRunLimit = $this->input->post("bottomRunLimit");
+			$id = $this->input->post("id");
+			$this->load->model("admin/superAgentModel", "super_agent", true);
 
-			$this->load->model("admin/agentManagementModel", "agent", true);
-
-			$update_flag = $this->agent->update_check($agent_id, $email);
+			$update_flag = $this->super_agent->update_check($id, $email);
 			if($update_flag == false){
 				$res   = array('state' => false, 'msg' => 'อีเมลนี้มีอยู่ในระบบแล้ว');
 			}else{
 
 				$data = array(
-					"agent_name" => $agent_name,
+					"name" => $name,
 					"email" => $email,
-					"credit" => $credit,
-					"commision" => $commision,
-					"active" => $active
+					"headLimit" => $headLimit,
+					"tailLimit" => $tailLimit,
+					"headSpecialLimit" => $headSpecialLimit,
+					"tailSpecialLimit" => $tailSpecialLimit,
+					"topLimit" => $topLimit,
+					"bottomLimit" => $bottomLimit,
+					"topRunLimit" => $topRunLimit,
+					"bottomRunLimit" => $bottomRunLimit
 				);
 
-				$this->agent->updateAgent($data, $agent_id);
+				$this->super_agent->updateSuperAgent($data, $id);
 
-				$res   = array('state' => true, 'msg' => $agent_name.' อัพเดทเสร็จสิ้น');
+				$res   = array('state' => true, 'msg' => $name.' อัพเดทเสร็จสิ้น');
 			}
         }
 		
@@ -136,18 +133,18 @@ class AgentManagement extends Base_Controller {
 					->set_output(json_encode($res));
 	}
 	
-	public function deleteAgent(){
-		$agent_id = $this->input->post("agent_id");
-		$agent_name = $this->input->post("agent_name");
+	public function deleteSuperAgent(){
+		$id = $this->input->post("id");
+		$name = $this->input->post("name");
 
 		$condition = array(
-			"agent_id" => $agent_id
+			"id" => $id
 		);
 
-		$this->load->model("admin/agentManagementModel", "agent", true);
-		$this->agent->deleteAgent($condition);
+		$this->load->model("admin/superAgentModel", "super_agent", true);
+		$this->super_agent->deleteSuperAgent($condition);
 
-		$toast = array('state' => true, 'msg' => $agent_name.' ลบเสร็จสิ้น');
+		$toast = array('state' => true, 'msg' => $name.' ลบเสร็จสิ้น');
 		$this->session->set_flashdata('toast', $toast);
 
 		echo "success";
@@ -156,7 +153,7 @@ class AgentManagement extends Base_Controller {
 	public function emailCheck($str){
 		
         $this->db->where('email', $str);
-        $query = $this->db->get('agents');
+        $query = $this->db->get('super_agents');
         if($query->num_rows() > 0){
         	$this->form_validation->set_message('emailCheck', 'อีเมลนี้มีอยู่ในระบบแล้ว');
             return FALSE;

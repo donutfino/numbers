@@ -40,29 +40,6 @@ class TwoDigits extends Base_Controller {
 		$this->load->view('admin/report/twoDigit', $content);
 	}
 
-	public function getLimitAndHoldByOrg(){
-		$request = json_decode(file_get_contents("php://input"));
-		$org_id = $request->org_id;
-		$condition = array(
-			"org_id" => $org_id
-		);
-		$this->load->model("admin/numberTypeModel", "numberType", true);
-		$res = $this->numberType->getLimitAndHoldByOrg($condition);
-		return $this->output
-					->set_content_type('application/json')
-					->set_output(json_encode($res));
-	}
-
-	public function getLimitAndHoldByDefault(){
-		$request = json_decode(file_get_contents("php://input"));
-		$org_id = $request->org_id;
-		$this->load->model("admin/numberTypeModel", "numberType", true);
-		$res = $this->numberType->getDefaultNumberTypes();
-		return $this->output
-					->set_content_type('application/json')
-					->set_output(json_encode($res));
-	}
-
 	public function getTopData(){
 		$request = json_decode(file_get_contents("php://input"));
 		$period_id = $request->period_id;
@@ -104,76 +81,6 @@ class TwoDigits extends Base_Controller {
 		);
 		$this->load->model("keyInModel", "keyIn", true);
 		$res = $this->keyIn->getData($condition);
-		return $this->output
-					->set_content_type('application/json')
-					->set_output(json_encode($res));
-	}
-
-	public function addNewSent(){
-
-		$request = json_decode(file_get_contents("php://input"));
-
-		$number_type = $request->number_type;
-		$number = $request->number;
-		$sent = $request->sent;
-		$period_id = $request->period_id;
-		$org_id = $request->org_id;
-
-		$data = array(
-			"number_type" => $number_type,
-			"number" => $number,
-			"sent" => $sent,
-			"period_id" => $period_id,
-			"org_id" => $org_id
-		);
-		$this->load->model("admin/sentModel", "sent", true);
-		$inserted_id = $this->sent->addNewSent($data);
-		$res = array('id' => $inserted_id);
-		return $this->output
-					->set_content_type('application/json')
-					->set_output(json_encode($res));
-	}
-
-	public function updateNewSent(){
-
-		$request = json_decode(file_get_contents("php://input"));
-
-		$number_type = $request->number_type;
-		$number = $request->number;
-		$sent = $request->sent;
-		$period_id = $request->period_id;
-		$org_id = $request->org_id;
-		$id = $request->id;
-
-		$data = array(
-			"sent" => $sent
-		);
-		$condition = array(
-			"number_type" => $number_type,
-			"number" => $number,
-			"id" => $id,
-			"period_id" => $period_id,
-			"org_id" => $org_id
-		);
-		$this->load->model("admin/sentModel", "sent", true);
-		$this->sent->updateNewSent($data, $condition);
-	}
-
-	public function getSent(){
-
-		$request = json_decode(file_get_contents("php://input"));
-
-		$number_type = $request->number_type;
-		$period_id = $request->period_id;
-		$org_id = $request->org_id;
-
-		$condition = array(
-			"number_type" => $number_type,
-			"period_id" => $period_id,
-			"org_id" => $org_id
-		);
-		$this->load->model("admin/sentModel", "sent", true);
-		$res = $this->sent->getSent($condition);
 		return $this->output
 					->set_content_type('application/json')
 					->set_output(json_encode($res));

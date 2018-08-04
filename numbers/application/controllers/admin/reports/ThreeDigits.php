@@ -109,66 +109,77 @@ class ThreeDigits extends Base_Controller {
 					->set_output(json_encode($res));
 	}
 
-	public function addNewSent(){
-
+	public function getDepth(){
 		$request = json_decode(file_get_contents("php://input"));
-
-		$number_type = $request->number_type;
-		$number = $request->number;
-		$sent = $request->sent;
 		$period_id = $request->period_id;
 		$org_id = $request->org_id;
-
-		$data = array(
-			"number_type" => $number_type,
-			"number" => $number,
-			"sent" => $sent,
+		$type = $request->type;
+		$condition = array(
 			"period_id" => $period_id,
-			"org_id" => $org_id
+			"org_id" => $org_id,
+			"type" => $type
 		);
 		$this->load->model("admin/sentModel", "sent", true);
-		$inserted_id = $this->sent->addNewSent($data);
-		$res = array('id' => $inserted_id);
+		$res = $this->sent->getDepth($condition);
 		return $this->output
 					->set_content_type('application/json')
 					->set_output(json_encode($res));
 	}
 
-	public function updateNewSent(){
+	public function getOrgDepth(){
+		$request = json_decode(file_get_contents("php://input"));
+		$org_id = $request->org_id;
+		$period_id = $request->period_id;
+		$condition = array(
+			"org_id" => $org_id,
+			"period_id" => $period_id
+		);
+		$this->load->model("admin/sentModel", "sent", true);
+		$res = $this->sent->getDepth($condition);
+		return $this->output
+					->set_content_type('application/json')
+					->set_output(json_encode($res));
+	}
+
+	public function addNewSent(){
 
 		$request = json_decode(file_get_contents("php://input"));
 
-		$number_type = $request->number_type;
+		$type = $request->type;
 		$number = $request->number;
-		$sent = $request->sent;
+		$amount = $request->amount;
+		$new_sent = $request->new_sent;
+		$hold = $request->hold;
 		$period_id = $request->period_id;
 		$org_id = $request->org_id;
-		$id = $request->id;
+		$depth = $request->depth;
+		$time = $request->time;
 
 		$data = array(
-			"sent" => $sent
-		);
-		$condition = array(
-			"number_type" => $number_type,
+			"type" => $type,
 			"number" => $number,
-			"id" => $id,
+			"amount" => $amount,
+			"new_sent" => $new_sent,
+			"hold" => $hold,
 			"period_id" => $period_id,
-			"org_id" => $org_id
+			"org_id" => $org_id,
+			"depth" => $depth,
+			"time" => $time
 		);
 		$this->load->model("admin/sentModel", "sent", true);
-		$this->sent->updateNewSent($data, $condition);
+		$this->sent->addNewSent($data);
 	}
 
 	public function getSent(){
 
 		$request = json_decode(file_get_contents("php://input"));
 
-		$number_type = $request->number_type;
+		$type = $request->type;
 		$period_id = $request->period_id;
 		$org_id = $request->org_id;
 
 		$condition = array(
-			"number_type" => $number_type,
+			"type" => $type,
 			"period_id" => $period_id,
 			"org_id" => $org_id
 		);

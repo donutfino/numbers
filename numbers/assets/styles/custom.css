@@ -1,3 +1,8 @@
+.page-sidebar{
+  position: fixed !important;
+  top: 50px !important;
+  z-index: 999;
+}
 .alert{
 	color: #ff6161;
   padding: 50px 100px 10px 50px;
@@ -166,13 +171,13 @@ td.high-light-weak{
   background: #FCE5CD;
 }
 .width-1340{
-  width: 1340px !important;
+  min-width: 1340px !important;
 }
 .width-1320{
-  width: 1320px !important;
+  min-width: 1320px !important;
 }
 .width-1300{
-  width: 1300px !important;
+  min-width: 1300px !important;
 }
 .send-btn{
   margin-bottom: 10px;
@@ -284,4 +289,7 @@ td.new-sent{
   text-align: center;
   padding-right: 30px;
   padding-left: 30px;
+}
+.all-sent{
+  color: #ff0000;
 }

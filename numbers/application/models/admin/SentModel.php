@@ -8,27 +8,31 @@
 
         public function getSent($condition){
             $this->db->select('*');
-            $this->db->from('latest_new_sent');
+            $this->db->from('log_sent');
             $this->db->where($condition);
             $query = $this->db->get();
             return $query->result();
         }
+
+        public function getDepth($condition){
+            $this->db->select_max('depth');
+            $this->db->where($condition);
+            $result = $this->db->get('log_sent')->row();
+            if($result->depth == null){
+                return 0;
+            }else{
+                return $result->depth;
+            }            
+        }
         
         public function addNewSent($data){
-            $this->db->insert('latest_new_sent', $data);
-            return $this->db->insert_id();
-        }
-
-        public function updateNewSent($data, $condition)
-        {
-            $this->db->where($condition);
-            $this->db->update('latest_new_sent', $data);
+            $this->db->insert('log_sent', $data);
         }
 
         public function deleteAllSent($condition)
         {
             $this->db->where($condition);
-            $this->db->delete('latest_new_sent');
+            $this->db->delete('log_sent');
         }
 	}
 ?>
